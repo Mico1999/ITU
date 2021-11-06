@@ -14,28 +14,28 @@ class MainWindowModel:
         self.model.setEditStrategy(QSqlTableModel.OnFieldChange)
         self.model.select()
         headers = ("id", "name", "study_field")
-        for idx, header in enumerate(headers):
+        for idx, header in enumerate(headers):      # set headers for QTableview
             self.model.setHeaderData(idx, Qt.Horizontal, header)
 
-    def AddLesson(self, data):
+    def Add_Lesson(self, data):
         """Add a lesson to the database."""
         rows = self.model.rowCount()
         self.model.insertRows(rows, 1)
         for column_index, field in enumerate(data):
             self.model.setData(self.model.index(rows, column_index + 1), field)
-        self.model.submitAll()
-        self.model.select()
+        self.model.submitAll()  # store changes to DB
+        self.model.select()     # reloads data from DB to model
 
-    def DeleteLesson(self, row):
+    def Delete_Lesson(self, row):
         """Remove a lesson from the database."""
         self.model.removeRow(row)
-        self.model.submitAll()
-        self.model.select()
+        self.model.submitAll()  # store changes to DB
+        self.model.select()     # reloads data from DB to model
 
-    def clearContacts(self):
+    def Clear_Lessons(self):
         """Remove all lessons from the database."""
         self.model.setEditStrategy(QSqlTableModel.OnManualSubmit)
         self.model.removeRows(0, self.model.rowCount())
-        self.model.submitAll()
+        self.model.submitAll()  # store changes to DB
         self.model.setEditStrategy(QSqlTableModel.OnFieldChange)
-        self.model.select()
+        self.model.select()     # reloads data from DB to model

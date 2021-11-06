@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+
 class MainWindow(QMainWindow):
     """Main Window."""
 
@@ -41,7 +42,7 @@ class MainWindow(QMainWindow):
         self.table = QTableView()
         self.table.setModel(self.MainViewModel.model)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.table.resizeColumnsToContents()
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         # set font for buttons
         button_font = QFont()
@@ -54,22 +55,18 @@ class MainWindow(QMainWindow):
         self.addButton = QPushButton("Add lesson")
         self.addButton.setStyleSheet("background-color: #729FCF")
         self.addButton.setFont(button_font)
-        #self.addButton.clicked.connect(self.openAddDialog)
 
         self.deleteButton = QPushButton("Delete lesson")
         self.deleteButton.setStyleSheet("background-color: #729FCF")
         self.deleteButton.setFont(button_font)
-        #self.deleteButton.clicked.connect(self.deleteContact)
 
         self.enterButton = QPushButton("Enter lesson")
         self.enterButton.setStyleSheet("background-color: #729FCF")
         self.enterButton.setFont(button_font)
-        # self.deleteButton.clicked.connect(self.enterLesson)
 
         self.clearAllButton = QPushButton("Clear All")
         self.clearAllButton.setStyleSheet("background-color: #729FCF")
         self.clearAllButton.setFont(button_font)
-        #self.clearAllButton.clicked.connect(self.clearLessons)
 
         # set font for header
         header_font = QFont()
@@ -127,7 +124,7 @@ class Add_Lesson_DialogGUI(QDialog):
         layout.addRow("Study field:", self.lesson_field)
         self.layout.addLayout(layout)
 
-        # Add standard buttons to the dialog and connect them
+        # Add standard buttons to the dialog (Ok/Cancel)
         self.buttonsBox = QDialogButtonBox(self)
         self.buttonsBox.setOrientation(Qt.Horizontal)
         self.buttonsBox.setStandardButtons(
