@@ -20,11 +20,11 @@ def CreateConnection(dbName):
         )
         return False
 
-    CreateLessonTable()
+    _CreateLessonTable()
     return True
 
 
-def CreateLessonTable():
+def _CreateLessonTable():
     """Create the contacts table in the database."""
     table_Query = QSqlQuery()
     return table_Query.exec(
@@ -33,6 +33,6 @@ def CreateLessonTable():
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             name VARCHAR(80) NOT NULL,
             study_field VARCHAR(80) NOT NULL
-        }
+        )
         """
     )

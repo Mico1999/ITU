@@ -17,13 +17,15 @@ def main():
     if not CreateConnection("StudyDEX.sqlite"):
         sys.exit(1)
 
+    # create model for main view
+    main_view_model = MainWindowModel()
+
     # create main view of app
-    main_view = MainWindow()
+    main_view = MainWindow(main_view_model)
     main_view.show()
 
-    # create model for main view and set it's controller
-    main_window_model = MainWindowModel()
-    MainWindowController(model=main_window_model, view=main_view)
+    # create controller for main view
+    main_window_controller = MainWindowController(model=main_view_model, view=main_view)
 
     sys.exit(app.exec_())
 

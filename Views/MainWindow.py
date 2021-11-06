@@ -11,7 +11,7 @@ from PyQt5.QtCore import *
 class MainWindow(QMainWindow):
     """Main Window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, model, parent=None):
         """Initializer."""
         super().__init__(parent)
         """
@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.layout = QHBoxLayout()
         self.centralWidget.setLayout(self.layout)
+        self.MainViewModel = model
 
         self.setupUI()
 
@@ -38,6 +39,7 @@ class MainWindow(QMainWindow):
         """Setup the main window's GUI."""
         # Create the table view widget
         self.table = QTableView()
+        self.table.setModel(self.MainViewModel.model)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.resizeColumnsToContents()
 
@@ -99,12 +101,12 @@ class MainWindow(QMainWindow):
         self.layout.addLayout(table_layout)
         self.layout.addLayout(button_layout)
 
-class AddLesson_Dialog:
-    """"Dialog window for entering new lesson."""
+class Add_Lesson_DialogGUI(QDialog):
+    """"GUI of dialog window for entering new lesson."""
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.setWindowTitle("Add Contact")
+        self.setWindowTitle("Add new Lesson")
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.data = None
@@ -117,18 +119,18 @@ class AddLesson_Dialog:
         self.lesson_name = QLineEdit()
         self.lesson_name.setObjectName("Name")
         self.lesson_field = QLineEdit()
-        self.lesson_field.setObjectName("Field")
+        self.lesson_field.setObjectName("Study field")
 
         # Lay out the data fields
         layout = QFormLayout()
         layout.addRow("Name:", self.lesson_name)
-        layout.addRow("Job:", self.lesson_field)
+        layout.addRow("Study field:", self.lesson_field)
         self.layout.addLayout(layout)
-        self.layout.addLayout(layout)
-        # Add standard buttons to the dialog and connect them
 
+        # Add standard buttons to the dialog and connect them
         self.buttonsBox = QDialogButtonBox(self)
         self.buttonsBox.setOrientation(Qt.Horizontal)
         self.buttonsBox.setStandardButtons(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         )
+        self.layout.addWidget(self.buttonsBox)
