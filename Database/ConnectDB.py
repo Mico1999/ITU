@@ -5,34 +5,27 @@
 
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from importlib import resources
+from Models.DbEntities import Card, Lesson, Collection
 
 
-def CreateConnection(dbName):
-    """Create and open a database connection."""
-    connection = QSqlDatabase.addDatabase("QSQLITE")
-    connection.setDatabaseName(dbName)
+class DbConnection:
+    def __init__(self):
+        with resources.path(
+                "Database", "StudyDEX.sqlite"
+        ) as sqlite_filepath:
+            self.engine = create_engine(f"sqlite:///{sqlite_filepath}", echo=False)
+        Session = sessionmaker(bind=self.engine)
+        # ^^^^^ function pointer
 
-    if not connection.open():
-        QMessageBox.warning(
-            None,
-            "StudyDex",
-            f"Database Error: {connection.lastError().text()}",
-        )
-        return False
+        # Creating tables
+        Lesson.metadata.create_all(self.engine)
+        Card.metadata.create_all(self.engine)
+        Collection.metadata.create_all(self.engine)
 
-    _CreateLessonTable()
-    return True
+        self.session = Session()
 
-
-def _CreateLessonTable():
-    """Create the contacts table in the database."""
-    table_Query = QSqlQuery()
-    return table_Query.exec(
-        """
-        CREATE TABLE IF NOT EXISTS Lesson (
-            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-            name VARCHAR(80) NOT NULL,
-            study_field VARCHAR(80) NOT NULL
-        )
-        """
-    )
+    def get_session(self):
+        return self.session
