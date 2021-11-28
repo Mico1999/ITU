@@ -44,7 +44,7 @@ class MainWindowController:
             index = index + 1
 
         """Connect signals from view to particular slots in controller."""
-        self._view.addButton.clicked.connect(self.add_lesson_view)
+        self._view.addButton.clicked.connect(partial(self.add_lesson_view, None, None))
 
     def add_lesson_view(self, lesson_name, study_field):
         self.lessonDetailView = LessonDetailView(lesson_name, study_field)
