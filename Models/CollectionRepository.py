@@ -10,7 +10,6 @@ class CollectionRepository:
     def insert_collection(self, collection):
         try:
             get = self.get_collection_by_lesson_card_collection_id(collection)
-            print(get)
         except:
             self.session.add(collection)
             self.session.commit()

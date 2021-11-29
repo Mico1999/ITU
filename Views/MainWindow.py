@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
-
+import sys
 
 class MainWindow(QMainWindow):
 
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout()
         self.grid = QGridLayout()
         self.centralWidget.setLayout(self.layout)
+        self.icon_path = 'Views/Assets/' if sys.platform.startswith('linux') else 'Views\\Assets\\'
 
         self.setup_ui()
 
@@ -51,7 +52,7 @@ class MainWindow(QMainWindow):
         self.addButton = QPushButton("Add lesson")
         self.addButton.setFont(button_font)
         self.addButton.setStyleSheet(self.button_style_sheet)
-        self.addButton.setIcon(QIcon(r'Views\Assets\plus.png'))
+        self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
 
         # set font for header
