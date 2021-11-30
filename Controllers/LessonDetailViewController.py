@@ -11,6 +11,7 @@ from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Models.DbEntities import Lesson
 from Controllers.ModeratorController import ModeratorController
 from Views.LessonDetailView import LessonDetailView
+from Controllers.CollectionDetailViewController import CollectionDetailViewController
 
 class LessonDetailViewController:
 
@@ -114,6 +115,9 @@ class LessonDetailViewController:
         if not self._view.lesson_name_edit.text():
             self._view.deleteButton.hide()
 
+        # connect signal for adding new collection to slot
+        self._view.addButton.clicked.connect(partial(self.add_collection_view, None))
+
         index = 0
         column_finished = 0
         row = 0
@@ -133,7 +137,7 @@ class LessonDetailViewController:
             else:
                 self._view.grid.addWidget(self.collection_buttons[index], row,  ((i - (COLUMNS - 1)) % COLUMNS))
 
-            # TODO self.collection_buttons[index].clicked.connect()
+            self.collection_buttons[index].clicked.connect(partial(self.add_collection_view, self.collections[index].collection_name))
             index = index + 1
 
         # Adding invisible buttons, so the has always COLUMNS columns
@@ -147,3 +151,14 @@ class LessonDetailViewController:
             self._view.grid.addWidget(empty_buttons[index], row, i)
             empty_buttons[index].hide()
             index = index + 1
+
+
+    def add_collection_view(self, collection_name):
+        """ Slots which catches signal for creating new collection """
+
+        # render lesson detail view by calling it's controller
+        self.collectionDetailViewController = CollectionDetailViewController(self, self._stacked_widget, collection_name)
+
+        # increase index of stack to see detail view
+        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
+

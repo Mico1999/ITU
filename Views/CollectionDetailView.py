@@ -5,11 +5,10 @@ from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 
-
-class LessonDetailView(QDialog):
+class CollectionDetailView(QDialog):
 
     def __init__(self):
-        super(LessonDetailView, self).__init__()
+        super(CollectionDetailView, self).__init__()
         self.icon_path = 'Views/Assets/' if sys.platform.startswith('linux') else 'Views\\Assets\\'
 
         self.layout = QVBoxLayout()
@@ -17,41 +16,31 @@ class LessonDetailView(QDialog):
         self.form_layout = QHBoxLayout()
 
         self.formGroupBox = QGroupBox()
-        self.lesson_name_edit = QLineEdit()
-        self.lesson_field_edit = QLineEdit()
+        self.collection_name_edit = QLineEdit()
         self.name_label = QLabel()
-        self.field_label = QLabel()
 
         self.main_header = QLabel()
-        
+
         self.buttonLayout = QHBoxLayout()
         self.saveButton = QPushButton("Save")
-        self.deleteButton = QPushButton("Delete lesson")
+        self.deleteButton = QPushButton("Delete collection")
         self.homeButton = QPushButton("Home")
-        
+
         self.grid = QGridLayout()
-        self.addButton = QPushButton("Add")
+        self.addButton = QPushButton("Add card")
 
-        self.setup_ui()
+        self.setup_UI()
 
-
-    def setup_ui(self):
-        """Setup the Add Lesson GUI."""
-
+    def setup_UI(self):
         # Form labels and edits
-        self.name_label.setText("Lesson Name:")
-        self.lesson_name_edit.setObjectName("lesson_name_edit")
-        self.field_label.setText("Lesson Field:")
-        self.lesson_field_edit.setObjectName("study_field")
+        self.name_label.setText("Collection Name:")
+        self.collection_name_edit.setObjectName("collection_name_edit")
 
         # Lay out the data fields
         self.form_layout.addWidget(self.name_label)
         self.form_layout.setSpacing(20)
-        self.form_layout.addWidget(self.lesson_name_edit)
+        self.form_layout.addWidget(self.collection_name_edit)
         self.form_layout.setSpacing(20)
-        self.form_layout.addWidget(self.field_label)
-        self.form_layout.setSpacing(20)
-        self.form_layout.addWidget(self.lesson_field_edit)
         self.form_layout.setSpacing(20)
         self.form_layout.addWidget(self.saveButton)
 
@@ -66,7 +55,7 @@ class LessonDetailView(QDialog):
         button_font.setBold(False)
         button_font.setWeight(50)
 
-        # Delete lesson buttton
+        # Delete collection buttton
         self.deleteButton.setFont(button_font)
         self.deleteButton.setStyleSheet(BUTTON_STYLING)
         self.deleteButton.setIcon(QIcon(self.icon_path + 'delete.png'))
@@ -77,7 +66,7 @@ class LessonDetailView(QDialog):
         self.homeButton.setStyleSheet(BUTTON_STYLING)
         self.homeButton.setIcon(QIcon(self.icon_path + 'home.png'))
         self.homeButton.setIconSize(QtCore.QSize(50, 50))
- 
+
         self.buttonLayout.addWidget(self.homeButton)
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.deleteButton)
@@ -94,12 +83,12 @@ class LessonDetailView(QDialog):
         self.main_header.setFont(header_font)
         self.main_header.setAlignment(Qt.AlignCenter)
 
-        # Adding widgets to alyout
+        # Adding widgets to layout
         self.layout.addWidget(self.formGroupBox)
         self.layout.addLayout(self.buttonLayout)
         self.layout.addWidget(self.main_header)
 
-        # Add new collection button
+        # Add new card button
         self.addButton.setStyleSheet(BUTTON_STYLING)
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
