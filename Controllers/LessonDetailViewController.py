@@ -4,13 +4,24 @@ from PyQt5.QtCore import *
 from PyQt5 import QtCore
 from Models.LessonRepository import LessonRepository
 from Models.DbEntities import Lesson
+from Controllers.ModeratorController import ModeratorController
+from Views.LessonDetailView import LessonDetailView
 
 class LessonDetailViewController:
 
-    def __init__(self, view, stacked_widget):
-        self._view = view
+    def __init__(self, main_window_controller, stacked_widget, lesson_name, lesson_field):
+
+        # render lesson detail view
+        self._view = LessonDetailView(lesson_name, lesson_field)
+
+        self._main_window_controller = main_window_controller
         self._stacked_widget = stacked_widget
         self._lesson_repository = LessonRepository()
+
+        # init moderator which will be dynamically calling controllers to override views if needed
+        self._moderator = ModeratorController()
+
+        # connect buttons from lesson detail views to slots
         self._view.saveButton.clicked.connect(self.save_lesson)
         self._view.deleteButton.clicked.connect(self.delete_lesson)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
@@ -19,8 +30,11 @@ class LessonDetailViewController:
         if not self._view.lesson_name.text():
             self._view.deleteButton.hide()
 
+        # add lesson detail view on stack
+        self._stacked_widget.addWidget(self._view)
 
     def save_lesson(self):
+        """ Stores new lesson user wants to create """
         self.lesson_name = self._view.lesson_name.text()
         self.lesson_field = self._view.lesson_field.text()
 
@@ -41,7 +55,7 @@ class LessonDetailViewController:
         QMessageBox.critical(None, "Error!", "Can not add lesson which already exists !")
 
     def delete_lesson(self):
-
+        """ Deletes lesson on the user demand """
         warning = QMessageBox.warning(None, "Warning!", "Do you want to delete this lesson completely ?\n"
                                                         "This action can not be restored !",
                                       QMessageBox.Ok | QMessageBox.Cancel)
@@ -52,7 +66,13 @@ class LessonDetailViewController:
             self.redirect_home_action()
 
     def redirect_home_action(self):
+        """ redirect to home view when user clicked home button """
+
+        # delete two views from stack => detail and home, cause home view will be rendered again
+        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
+        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
         self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
 
-
+        # moderator will call main window controller to render home view once again
+        self._moderator.switch_view_to_home(self._main_window_controller)
