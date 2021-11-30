@@ -1,6 +1,7 @@
 from Database.ConnectDB import DbConnection
 from Models.DbEntities import Lesson, Card, Collection
 
+
 class LessonRepository:
     def __init__(self):
         self.connection = DbConnection()
@@ -15,7 +16,6 @@ class LessonRepository:
             return
 
         raise Exception('Lesson name already exists!')
-
 
     def delete_lesson(self, lesson):
         try:

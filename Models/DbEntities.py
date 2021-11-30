@@ -36,6 +36,6 @@ class Card(Base):
 class Collection(Base):
     __tablename__ = 'collection'
     id = Column(Integer, primary_key=True)
-    collection_id = Column(Integer)
+    collection_name = Column(String)
     lesson_id = Column(Integer, ForeignKey("lesson.id"))
     card_id = Column(Integer, ForeignKey("card.id"))

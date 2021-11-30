@@ -1,6 +1,7 @@
 from Database.ConnectDB import DbConnection
 from Models.DbEntities import Lesson, Card, Collection
 
+
 class CardRepository:
     def __init__(self):
         self.connection = DbConnection()
