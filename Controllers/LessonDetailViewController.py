@@ -8,20 +8,25 @@ from Models.CollectionRepository import CollectionRepository
 from Models.DbEntities import Lesson, Collection
 from functools import partial
 from Views.Templates.ButtonStyling import BUTTON_STYLING
-
+from Models.DbEntities import Lesson
+from Controllers.ModeratorController import ModeratorController
+from Views.LessonDetailView import LessonDetailView
 
 class LessonDetailViewController:
 
-    def __init__(self, view, stacked_widget, lesson_name):
-        # View
-        self._view = view
+    def __init__(self, main_window_controller, stacked_widget, lesson_name):
+
+        self._main_window_controller = main_window_controller
         self._stacked_widget = stacked_widget
 
         # Repositories
         self._lesson_repository = LessonRepository()
         self.collection_repository = CollectionRepository()
         self.card_repository = CardRepository()
-        
+
+        # init moderator which will be dynamically calling controllers to override views if needed
+        self._moderator = ModeratorController()
+
         self.collections = [] # All collection in current lesson
         self.collection_buttons = []
         self.lesson = None # Current lesson
@@ -35,12 +40,14 @@ class LessonDetailViewController:
 
     def connect(self):
         """ Connect view with click in separate function"""
+
+        # connect buttons from lesson detail views to slots
         self._view.saveButton.clicked.connect(self.save_lesson)
         self._view.deleteButton.clicked.connect(self.delete_lesson)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
 
-
     def save_lesson(self):
+        """ Stores new lesson user wants to create """
         # Lesson data from input
         lesson_name_string = self._view.lesson_name_edit.text()
         lesson_field_string = self._view.lesson_field_edit.text()
@@ -62,7 +69,8 @@ class LessonDetailViewController:
         QMessageBox.critical(None, "Error!", "Can not add lesson which already exists !")
 
     def delete_lesson(self):
-        # if lesson is not set, we are creating new lesson, cannor delete
+        """ Deletes lesson on the user demand """
+        # if lesson is not set, we can not delete
         if not self.lesson:
             return
 
@@ -76,11 +84,25 @@ class LessonDetailViewController:
             self.redirect_home_action()
 
     def redirect_home_action(self):
+        """ redirect to home view when user clicked home button """
+
+        # delete two views from stack => detail and home, cause home view will be rendered again
+        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
+        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
         self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
 
+        # moderator will call main window controller to render home view once again
+        self._moderator.switch_view_to_home(self._main_window_controller)
 
     def setup_ui(self):
+
+        # render lesson detail view
+        self._view = LessonDetailView()
+
+        # add lesson detail view on stack
+        self._stacked_widget.addWidget(self._view)
+
         self._view.grid.setContentsMargins(50, 40, 50, 20)
 
         if self.lesson:
