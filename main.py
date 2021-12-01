@@ -16,7 +16,6 @@ def main():
     # Seed initial data, if called once, should be commented, bcs throws exception
     #seed()
 
-
     # create controller for main view, view is rendered in controller
     main_window_controller = MainWindowController()
 
