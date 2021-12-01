@@ -34,6 +34,7 @@ class CollectionDetailView(QDialog):
         self.setup_UI()
 
     def setup_UI(self):
+
         # Form labels and edits
         self.name_label.setText("Collection Name:")
         self.collection_name_edit.setObjectName("collection_name_edit")

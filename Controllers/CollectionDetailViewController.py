@@ -8,6 +8,7 @@ from functools import partial
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 from PyQt5.QtWidgets import *
 from Controllers.CardDetailViewController import CardDetailViewController
+from Views.Templates.MyButton import MyButton
 
 
 class CollectionDetailViewController:
@@ -75,7 +76,9 @@ class CollectionDetailViewController:
             else:
                 column_finished = i
 
-            self.card_buttons.append(QPushButton(str(self.cards[i].front_text)))
+            button = MyButton(self.cards[i].front_text, self.cards[i].back_text)
+            self.card_buttons.append(button)
+
             self.card_buttons[index].setStyleSheet(BUTTON_STYLING)
             if row == 0:
                 self._view.grid.addWidget(self.card_buttons[index], 0, (i + 1) % COLUMNS)
