@@ -5,19 +5,17 @@ from PyQt5 import QtCore
 from Models.LessonRepository import LessonRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
-from Models.DbEntities import Lesson, Collection
 from functools import partial
 from Views.Templates.ButtonStyling import BUTTON_STYLING
-from Models.DbEntities import Lesson
-from Controllers.ModeratorController import ModeratorController
+from Models.DbEntities import Lesson, Collection
 from Views.LessonDetailView import LessonDetailView
 from Controllers.CollectionDetailViewController import CollectionDetailViewController
 
+
 class LessonDetailViewController:
 
-    def __init__(self, main_window_controller, stacked_widget, lesson_name):
+    def __init__(self, moderator, stacked_widget, lesson_name):
 
-        self._main_window_controller = main_window_controller
         self._stacked_widget = stacked_widget
 
         # Repositories
@@ -26,7 +24,8 @@ class LessonDetailViewController:
         self.card_repository = CardRepository()
 
         # init moderator which will be dynamically calling controllers to override views if needed
-        self._moderator = ModeratorController()
+        self._moderator = moderator
+        self._moderator.add_lesson_detail_controller(self)
 
         self.collections = [] # All collection in current lesson
         self.collection_buttons = []
@@ -35,9 +34,8 @@ class LessonDetailViewController:
             self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name)
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
 
-        self.setup_ui()
+        self.setup_UI()
         self.connect()
-
 
     def connect(self):
         """ Connect view with click in separate function"""
@@ -49,6 +47,7 @@ class LessonDetailViewController:
 
     def save_lesson(self):
         """ Stores new lesson user wants to create """
+
         # Lesson data from input
         lesson_name_string = self._view.lesson_name_edit.text()
         lesson_field_string = self._view.lesson_field_edit.text()
@@ -61,8 +60,15 @@ class LessonDetailViewController:
         try:
             lesson_exists = self._lesson_repository.get_lesson_by_name(lesson_name_string)
         except:
-            new_lesson = Lesson(name=lesson_name_string, study_field=lesson_field_string)
-            self._lesson_repository.insert_lesson(new_lesson)    # save new lesson to DB
+            if self.lesson:
+                # update
+                self.lesson.name = lesson_name_string
+                self.lesson.study_field = lesson_field_string
+                self._lesson_repository.insert_lesson(self.lesson)
+            else:  # insert
+                new_lesson = Lesson(name=lesson_name_string, study_field=lesson_field_string)
+                self._lesson_repository.insert_lesson(new_lesson)    # save new lesson to DB
+
             self._view.main_header.setText(lesson_name_string)     # set main header of detail view as lesson name
             return
 
@@ -94,15 +100,24 @@ class LessonDetailViewController:
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
 
         # moderator will call main window controller to render home view once again
-        self._moderator.switch_view_to_home(self._main_window_controller)
+        self._moderator.switch_view_to_main_window()
 
-    def setup_ui(self):
+    def setup_UI(self):
 
         # render lesson detail view
         self._view = LessonDetailView()
 
+        # For proper view rendering
+        self.collection_buttons = []
+        self.collections = []
+        if self.lesson:
+            self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
+
         # add lesson detail view on stack
         self._stacked_widget.addWidget(self._view)
+
+        # increase index of stack to see detail view
+        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
         self._view.grid.setContentsMargins(50, 40, 50, 20)
 
@@ -137,7 +152,8 @@ class LessonDetailViewController:
             else:
                 self._view.grid.addWidget(self.collection_buttons[index], row,  ((i - (COLUMNS - 1)) % COLUMNS))
 
-            self.collection_buttons[index].clicked.connect(partial(self.add_collection_view, self.collections[index].collection_name))
+            self.collection_buttons[index].clicked.connect(
+                partial(self.add_collection_view, self.collections[index].id))
             index = index + 1
 
         # Adding invisible buttons, so the has always COLUMNS columns
@@ -152,13 +168,13 @@ class LessonDetailViewController:
             empty_buttons[index].hide()
             index = index + 1
 
-
-    def add_collection_view(self, collection_name):
+    def add_collection_view(self, id_of_collection):
         """ Slots which catches signal for creating new collection """
 
-        # render lesson detail view by calling it's controller
-        self.collectionDetailViewController = CollectionDetailViewController(self, self._stacked_widget, collection_name)
-
-        # increase index of stack to see detail view
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
-
+        # render collection detail view by calling it's controller
+        self.collectionDetailViewController = \
+            CollectionDetailViewController(
+                self._moderator,
+                self._stacked_widget,
+                id_of_collection,
+                self.lesson.id)

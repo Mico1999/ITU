@@ -10,6 +10,7 @@ from Models.CollectionRepository import CollectionRepository
 from Controllers.LessonDetailViewController import LessonDetailViewController
 from Views.MainWindow import MainWindow
 from functools import partial
+from Controllers.ModeratorController import ModeratorController
 
 from Models.DbEntities import Lesson, Card, Collection
 
@@ -24,6 +25,10 @@ class MainWindowController:
         self.stacked_widget = QStackedWidget()
         self.stacked_widget.setWindowTitle("StudyDex")
         self.stacked_widget.resize(1000, 600)
+
+        # Register moderator
+        self._moderator = ModeratorController()
+        self._moderator.add_main_window_controller(self)
 
         self.setup_UI()
 
@@ -83,7 +88,4 @@ class MainWindowController:
         """ Slot triggered when user clicked add lesson button on main home view """
 
         # render lesson detail view by calling it's controller
-        self.lessonDetailViewController = LessonDetailViewController(self, self.stacked_widget, lesson_name)
-
-        # increase index of stack to see detail view
-        self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex()+1)
+        self.lessonDetailViewController = LessonDetailViewController(self._moderator, self.stacked_widget, lesson_name)
