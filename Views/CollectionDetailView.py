@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 
+
 class CollectionDetailView(QDialog):
 
     def __init__(self):
@@ -25,6 +26,7 @@ class CollectionDetailView(QDialog):
         self.saveButton = QPushButton("Save")
         self.deleteButton = QPushButton("Delete collection")
         self.homeButton = QPushButton("Home")
+        self.backButton = QPushButton("Back")
 
         self.grid = QGridLayout()
         self.addButton = QPushButton("Add card")
@@ -61,6 +63,12 @@ class CollectionDetailView(QDialog):
         self.deleteButton.setIcon(QIcon(self.icon_path + 'delete.png'))
         self.deleteButton.setIconSize(QtCore.QSize(50, 50))
 
+        # Navigate back button
+        self.backButton.setFont(button_font)
+        self.backButton.setStyleSheet(BUTTON_STYLING)
+        self.backButton.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
+        self.backButton.setIconSize(QtCore.QSize(50, 50))
+
         # Navigate home button
         self.homeButton.setFont(button_font)
         self.homeButton.setStyleSheet(BUTTON_STYLING)
@@ -68,6 +76,8 @@ class CollectionDetailView(QDialog):
         self.homeButton.setIconSize(QtCore.QSize(50, 50))
 
         self.buttonLayout.addWidget(self.homeButton)
+        self.buttonLayout.setSpacing(20)
+        self.buttonLayout.addWidget(self.backButton)
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.deleteButton)
         self.buttonLayout.setAlignment(Qt.AlignRight)
@@ -79,7 +89,7 @@ class CollectionDetailView(QDialog):
         header_font.setBold(True)
         header_font.setWeight(50)
 
-        # Label with Lesson name
+        # Label with Collection name
         self.main_header.setFont(header_font)
         self.main_header.setAlignment(Qt.AlignCenter)
 
