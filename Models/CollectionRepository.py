@@ -12,11 +12,10 @@ class CollectionRepository:
         try:
             get = self.get_collection_by_lesson_card_collection_name(collection)
         except:
-            self.session.add(collection)
-            self.session.commit()
-            return
+            self.session.add(collection)  # if exists update
 
-        raise Exception('Collection already exists!')
+        # if exists update
+        self.session.commit()
 
     def delete_collection(self, collection):
         try:
@@ -42,6 +41,4 @@ class CollectionRepository:
 
     def get_all_collections(self):
         return self.session.query(Collection).all()
-
-
 

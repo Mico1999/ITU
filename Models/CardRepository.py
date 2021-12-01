@@ -12,10 +12,8 @@ class CardRepository:
             self.get_card_by_texts(card.front_text, card.back_text)
         except:
             self.session.add(card)
-            self.session.commit()
-            return
 
-        raise Exception('Card already exists!')
+        self.session.commit()
 
     def delete_card(self, card):
         try:
@@ -34,6 +32,9 @@ class CardRepository:
 
     def get_all_cards(self):
         return self.session.query(Card).all()
+
+    def get_all_collection_cards(self, collection_id):
+        return self.session.query(Card).join(Collection).filter(Collection.id == collection_id).all()
 
 
 
