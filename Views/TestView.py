@@ -1,4 +1,5 @@
 from Views.Templates.ButtonStyling import BUTTON_STYLING, WRONG_BUTTON, RIGHT_BUTTON
+from Views.Templates.ProgressBarStyling import DEFAULT_STYLE
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -14,9 +15,9 @@ class TestView(QDialog):
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
-        self.form_layout = QHBoxLayout()
 
         self.buttonLayoutTop = QHBoxLayout()
+        self.progress = QProgressBar()
         self.cancelButton = QPushButton("Cancel test")
 
         self.label_layout = QVBoxLayout()
@@ -36,6 +37,9 @@ class TestView(QDialog):
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
+
+        self.progress.setGeometry(200, 80, 250, 20)
+        self.progress.setStyleSheet(DEFAULT_STYLE)
 
         # Cancel test button
         self.cancelButton.setFont(button_font)
@@ -76,8 +80,10 @@ class TestView(QDialog):
         self.rightButton.setIcon(QIcon(self.icon_path + 'check.png'))
         self.rightButton.setIconSize(QtCore.QSize(50, 50))
 
+        self.buttonLayoutTop.addWidget(self.progress)
+        self.buttonLayoutTop.setSpacing(20)
         self.buttonLayoutTop.addWidget(self.cancelButton)
-        self.buttonLayoutTop.setAlignment(Qt.AlignRight)
+        self.buttonLayoutTop.setAlignment(Qt.AlignCenter)
 
         self.buttonLayoutBottom.addWidget(self.wrongButton)
         self.buttonLayoutBottom.setSpacing(20)

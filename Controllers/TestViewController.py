@@ -41,6 +41,8 @@ class TestViewController:
         self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
         random.shuffle(self.cards)
 
+        self.all_cards_count = len(self.cards)
+
     def connect(self):
         self._view.cancelButton.clicked.connect(self.redirect_back_action)
         self._view.rightButton.clicked.connect(self.next_card)
@@ -60,6 +62,9 @@ class TestViewController:
             self._view.front_label.setText(card.front_text)
             self._view.back_label.setText(card.back_text)
             self._view.back_label.setHidden(True)
+            fraction = len(self.cards) / self.all_cards_count
+            self._view.progress.setValue(100 - fraction*100)
+            self._view.progress.setFormat(str(self.all_cards_count - len(self.cards))+"/"+str(self.all_cards_count))
         else:
            self.redirect_back_action() 
 
