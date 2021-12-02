@@ -8,6 +8,7 @@ from functools import partial
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 from PyQt5.QtWidgets import *
 from Controllers.CardDetailViewController import CardDetailViewController
+from sqlalchemy.exc import NoResultFound
 
 
 class CollectionDetailViewController:
@@ -31,7 +32,7 @@ class CollectionDetailViewController:
         if id_of_collection:
             self.collection = self._collection_repository.get_collection_by_id(id_of_collection)
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
-        if lesson_id:
+        if lesson_id: # self.lesson cannot stay None
             self.lesson = self._lesson_repository.get_lesson_by_id(lesson_id)
 
         self.setup_UI()
@@ -139,11 +140,11 @@ class CollectionDetailViewController:
             return
 
         # new collection can not be in DB already
-        new_collection = Collection(collection_name=collection_name_string, lesson_id=self.lesson.id, card_id=0)
+        new_collection = Collection(collection_name=collection_name_string, lesson_id=self.lesson.id)
         try:
             collection_exists = self._collection_repository\
-                .get_collection_by_lesson_card_collection_name(new_collection)
-        except:
+                .get_lesson_collection_by_name(new_collection)
+        except NoResultFound:  # Insert it
             self._view.main_header.setText(collection_name_string)  # set main header of detail view as collection name
             if self.collection:
                 self.collection.collection_name = collection_name_string
@@ -153,7 +154,8 @@ class CollectionDetailViewController:
 
                 # enable adding new card by clicking on add button without need to render this view once again
                 self._view.addButton.show()
-                self.enable_adding_card()
+                self._view.deleteButton.show()
+                self.actualize_current_working_collection(new_collection)
 
             self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
             return
@@ -162,8 +164,8 @@ class CollectionDetailViewController:
         QMessageBox.critical(None, "Error!", "Can not add collection which already exists !")
 
     def delete_collection(self):
-        """ Deletes lesson on the user demand """
-        # if lesson is not set, we can not delete
+        """ Deletes collection on the user demand """
+        # if collection is not set, we can not delete
         if not self.collection:
             return
 
@@ -172,21 +174,15 @@ class CollectionDetailViewController:
                                       QMessageBox.Ok | QMessageBox.Cancel)
 
         if warning == QMessageBox.Ok:
-            collection_to_delete = self._collection_repository\
-                .get_collection_by_lesson_card_collection_name(self.collection)
-            self._collection_repository.delete_collection(collection_to_delete)
+            self._collection_repository.delete_collection(self.collection)
+
             self.redirect_back_action()
 
-    def enable_adding_card(self):
-        """ Enables adding new card from actual view without need to """
-        """ render this view once again """
-
-        collection_id = None
-        all_collections = self._collection_repository.get_all_lesson_collections(self.lesson)
-        for i in range(len(all_collections)):
-            if all_collections[i].collection_name == self._view.main_header.text():
-                collection_id = all_collections[i].id
-                break
-
+    def actualize_current_working_collection(self, new_collection):
+        """
+        Re-fetch a collection after inserting it to receive its generated ID
+        (self.collection is also an indicator of whether the currently shown collection
+            is being persisted or transient)
+        """
         # store recently created collection
-        self.collection = self._collection_repository.get_collection_by_id(collection_id)
+        self.collection = self._collection_repository.get_lesson_collection_by_name(new_collection)
