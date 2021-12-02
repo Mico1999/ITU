@@ -50,8 +50,6 @@ class CollectionDetailViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
-        print("Colection: ", len(self._stacked_widget))
-
         self._view.grid.setContentsMargins(50, 40, 50, 20)
 
         self.card_buttons = []

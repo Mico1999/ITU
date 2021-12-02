@@ -38,8 +38,6 @@ class TestViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
-        print("Test: ",len(self._stacked_widget))
-
         self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
         random.shuffle(self.cards)
 
