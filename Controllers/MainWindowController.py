@@ -24,7 +24,7 @@ class MainWindowController:
 
         self.stacked_widget = QStackedWidget()
         self.stacked_widget.setWindowTitle("StudyDex")
-        self.stacked_widget.resize(1000, 600)
+        self.stacked_widget.resize(1300, 600)
 
         # Register moderator
         self._moderator = ModeratorController()

@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
 from Views.Templates.MyQDialog import MyQDialog
+from Views.Templates.MyQLabel import MyQLabel
 
 
 class TestView(MyQDialog):
@@ -22,8 +23,8 @@ class TestView(MyQDialog):
         self.cancelButton = QPushButton("Cancel test")
 
         self.label_layout = QVBoxLayout()
-        self.front_label = QLabel()
-        self.back_label = QLabel()
+        self.front_label = MyQLabel()
+        self.back_label = MyQLabel()
 
         self.buttonLayoutBottom = QHBoxLayout()
         self.rightButton = QPushButton("I know it")

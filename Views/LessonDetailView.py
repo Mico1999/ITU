@@ -5,6 +5,8 @@ from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Views.Templates.MyQDialog import MyQDialog
+from Views.Templates.MyQLineEdit import MyQLineEdit
+from Views.Templates.MyQLabel import MyQLabel
 
 
 class LessonDetailView(MyQDialog):
@@ -18,12 +20,12 @@ class LessonDetailView(MyQDialog):
         self.form_layout = QHBoxLayout()
 
         self.formGroupBox = QGroupBox()
-        self.lesson_name_edit = QLineEdit()
-        self.lesson_field_edit = QLineEdit()
-        self.name_label = QLabel()
-        self.field_label = QLabel()
+        self.lesson_name_edit = MyQLineEdit()
+        self.lesson_field_edit = MyQLineEdit()
+        self.name_label = MyQLabel()
+        self.field_label = MyQLabel()
 
-        self.main_header = QLabel()
+        self.main_header = MyQLabel()
         
         self.buttonLayout = QHBoxLayout()
         self.saveButton = QPushButton("Save")
@@ -59,6 +61,7 @@ class LessonDetailView(MyQDialog):
         # set style of formGroupBox
         self.form_layout.setAlignment(Qt.AlignTop)
         self.formGroupBox.setLayout(self.form_layout)
+        self.formGroupBox.setStyleSheet("QGroupBox{border-style: none;}")
 
         # setting home and delete button
         button_font = QFont()
@@ -66,6 +69,12 @@ class LessonDetailView(MyQDialog):
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
+
+        # Save collection buttton
+        self.saveButton.setFont(button_font)
+        self.saveButton.setStyleSheet(BUTTON_STYLING)
+        self.saveButton.setIcon(QIcon(self.icon_path + 'save.png'))
+        self.saveButton.setIconSize(QtCore.QSize(50, 50))
 
         # Delete lesson buttton
         self.deleteButton.setFont(button_font)

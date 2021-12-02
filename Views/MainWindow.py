@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
+from Views.Templates.MyQLabel import MyQLabel
 
 
 class MainWindow(QMainWindow):
@@ -14,6 +15,7 @@ class MainWindow(QMainWindow):
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
         self.layout = QVBoxLayout()
+        # TODO self.scroll = QScrollArea()
         self.grid = QGridLayout()
         self.centralWidget.setLayout(self.layout)
         self.icon_path = 'Views/Assets/' if sys.platform.startswith('linux') else 'Views\\Assets\\'
@@ -44,7 +46,7 @@ class MainWindow(QMainWindow):
 
         # set font for header
         header_font = QFont()
-        header_font.setFamily("UnPilgia")
+        header_font.setFamily("Monaco")
         header_font.setPointSize(35)
         header_font.setBold(True)
         header_font.setWeight(50)
