@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import *
 from Controllers.CardDetailViewController import CardDetailViewController
 from Views.Templates.MyButton import MyButton
 from sqlalchemy.exc import NoResultFound
+from Controllers.TestViewController import TestViewController
 
 
 class CollectionDetailViewController:
@@ -49,15 +50,15 @@ class CollectionDetailViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
-        self._view.grid.setContentsMargins(50, 40, 50, 20)
+        print("Colection: ", len(self._stacked_widget))
 
-        if self.collection:
-            self._view.main_header.setText(self.collection.collection_name)
-            self._view.collection_name_edit.setText(self.collection.collection_name)
+        self._view.grid.setContentsMargins(50, 40, 50, 20)
 
         self.card_buttons = []
         self.cards = []
         if self.collection:
+            self._view.main_header.setText(self.collection.collection_name)
+            self._view.collection_name_edit.setText(self.collection.collection_name)
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
             self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
 
@@ -67,6 +68,10 @@ class CollectionDetailViewController:
             self._view.addButton.hide()
 
         # self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
+        # hide test button if there is no collection nor cards in detail view yet
+        if not self.collection or not self.cards:
+            self._view.testButton.hide()
+
         index = 0
         column_finished = 0
         row = 0
@@ -115,6 +120,7 @@ class CollectionDetailViewController:
         self._view.deleteButton.clicked.connect(self.delete_collection)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
         self._view.backButton.clicked.connect(self.redirect_back_action)
+        self._view.testButton.clicked.connect(self.test_action)
 
     def redirect_home_action(self):
         """ redirect to home view when user clicked home button """
@@ -189,3 +195,6 @@ class CollectionDetailViewController:
         """
         # store recently created collection
         self.collection = self._collection_repository.get_lesson_collection_by_name(new_collection)
+
+    def test_action(self):
+        self.test_controller = TestViewController(self._moderator, self._stacked_widget, self.collection.id)

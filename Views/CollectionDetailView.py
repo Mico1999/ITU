@@ -27,6 +27,7 @@ class CollectionDetailView(QDialog):
         self.deleteButton = QPushButton("Delete collection")
         self.homeButton = QPushButton("Home")
         self.backButton = QPushButton("Back")
+        self.testButton = QPushButton("Test")
 
         self.grid = QGridLayout()
         self.addButton = QPushButton("Add card")
@@ -76,6 +77,14 @@ class CollectionDetailView(QDialog):
         self.homeButton.setIcon(QIcon(self.icon_path + 'home.png'))
         self.homeButton.setIconSize(QtCore.QSize(50, 50))
 
+        # Test button
+        self.testButton.setFont(button_font)
+        self.testButton.setStyleSheet(BUTTON_STYLING)
+        self.testButton.setIcon(QIcon(self.icon_path + 'test.png'))
+        self.testButton.setIconSize(QtCore.QSize(50, 50))
+
+        self.buttonLayout.addWidget(self.testButton)
+        self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.homeButton)
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.backButton)

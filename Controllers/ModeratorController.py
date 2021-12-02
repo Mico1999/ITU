@@ -8,6 +8,7 @@ class ModeratorController:
         self.lesson_detail_controller = None
         self.collection_detail_controller = None
         self.card_detail_controller = None
+        self.test_view_controller = None
 
     # register this function in constructor of corresponding controller
     def add_main_window_controller(self, main_window_controller):
@@ -21,6 +22,9 @@ class ModeratorController:
 
     def add_card_detail_controller(self, card_detail_controller):
         self.card_detail_controller = card_detail_controller
+
+    def add_test_view_controller(self, test_view_controller):
+        self.test_view_controller = test_view_controller
 
     # to switch view just call this functions
     def switch_view_to_main_window(self):
