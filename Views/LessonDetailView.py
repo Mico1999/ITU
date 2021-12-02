@@ -30,7 +30,7 @@ class LessonDetailView(QDialog):
         self.homeButton = QPushButton("Home")
         
         self.grid = QGridLayout()
-        self.addButton = QPushButton("Add")
+        self.addButton = QPushButton("Add collection")
 
         self.setup_ui()
 
