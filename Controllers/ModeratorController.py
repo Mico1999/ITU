@@ -50,4 +50,3 @@ class ModeratorController:
 
         for i in range(reduction_level):
             stacked_widget.removeWidget(stacked_widget.widget(stacked_widget.currentIndex()))
-            stacked_widget.setCurrentIndex(stacked_widget.currentIndex() - 1)

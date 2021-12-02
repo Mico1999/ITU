@@ -115,7 +115,7 @@ class CardDetailViewController:
     def redirect_back_action(self):
         """ redirect to lesson detail view when user clicked delete button """
 
-        self._moderator.reduce_widget_stack(self._stacked_widget, 3)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 2)
 
         # moderator will call lesson detail controller to render view
         self._moderator.switch_view_to_collection_detail_view()
