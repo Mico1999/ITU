@@ -57,12 +57,14 @@ class CollectionDetailViewController:
         self.cards = []
         if self.collection:
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
+            self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
 
-        # hide delete button if there is no lesson in detail view yet
+        # hide delete/add button if there is no collection in detail view yet
         if not self._view.collection_name_edit.text():
             self._view.deleteButton.hide()
+            self._view.addButton.hide()
 
-        self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
+        # self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
         index = 0
         column_finished = 0
         row = 0
@@ -114,12 +116,7 @@ class CollectionDetailViewController:
         """ redirect to home view when user clicked home button """
 
         # delete three views from stack, cause home view will be rendered again
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 3)
 
         # moderator will call main window controller to render home view once again
         self._moderator.switch_view_to_main_window()
@@ -127,10 +124,7 @@ class CollectionDetailViewController:
     def redirect_back_action(self):
         """ redirect to lesson detail view when user clicked delete button """
 
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 2)
 
         # moderator will call lesson detail controller to render view
         self._moderator.switch_view_to_lesson_detail_view()
@@ -140,7 +134,7 @@ class CollectionDetailViewController:
         # Lesson data from input
         collection_name_string = self._view.collection_name_edit.text()
 
-        if not collection_name_string :
+        if not collection_name_string:
             QMessageBox.critical(None, "Error!", "Collection name must be filled !")
             return
 
@@ -150,12 +144,18 @@ class CollectionDetailViewController:
             collection_exists = self._collection_repository\
                 .get_collection_by_lesson_card_collection_name(new_collection)
         except:
+            self._view.main_header.setText(collection_name_string)  # set main header of detail view as collection name
             if self.collection:
                 self.collection.collection_name = collection_name_string
                 self._collection_repository.insert_collection(self.collection)
             else:
-                self._collection_repository.insert_collection(new_collection)    # save new lesson to DB
-            self._view.main_header.setText(collection_name_string)     # set main header of detail view as lesson name
+                self._collection_repository.insert_collection(new_collection)    # save new collection to DB
+
+                # enable adding new card by clicking on add button without need to render this view once again
+                self._view.addButton.show()
+                self.enable_adding_card()
+
+            self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
             return
 
         # lesson already exists
@@ -176,3 +176,17 @@ class CollectionDetailViewController:
                 .get_collection_by_lesson_card_collection_name(self.collection)
             self._collection_repository.delete_collection(collection_to_delete)
             self.redirect_back_action()
+
+    def enable_adding_card(self):
+        """ Enables adding new card from actual view without need to """
+        """ render this view once again """
+
+        collection_id = None
+        all_collections = self._collection_repository.get_all_lesson_collections(self.lesson)
+        for i in range(len(all_collections)):
+            if all_collections[i].collection_name == self._view.main_header.text():
+                collection_id = all_collections[i].id
+                break
+
+        # store recently created collection
+        self.collection = self._collection_repository.get_collection_by_id(collection_id)
