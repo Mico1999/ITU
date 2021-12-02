@@ -10,7 +10,7 @@ from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Models.DbEntities import Lesson, Collection
 from Views.LessonDetailView import LessonDetailView
 from Controllers.CollectionDetailViewController import CollectionDetailViewController
-
+from sqlalchemy.exc import NoResultFound
 
 class LessonDetailViewController:
 
@@ -33,6 +33,8 @@ class LessonDetailViewController:
         if lesson_name:
             self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name)
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
+
+        self._view = None
 
         self.setup_UI()
         self.connect()
@@ -59,7 +61,7 @@ class LessonDetailViewController:
         # new lesson can not be in DB already
         try:
             lesson_exists = self._lesson_repository.get_lesson_by_name(lesson_name_string)
-        except:
+        except NoResultFound:
             if self.lesson:
                 # update
                 self.lesson.name = lesson_name_string
@@ -68,6 +70,12 @@ class LessonDetailViewController:
             else:  # insert
                 new_lesson = Lesson(name=lesson_name_string, study_field=lesson_field_string)
                 self._lesson_repository.insert_lesson(new_lesson)    # save new lesson to DB
+
+                # enable adding new collection by clicking on add button without need to render this view once again
+                self._view.addButton.show()
+                self._view.deleteButton.show()
+                # Actualize the currently shown lesson (re-fetch for generated ID after its insert)
+                self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name_string)
 
             self._view.main_header.setText(lesson_name_string)     # set main header of detail view as lesson name
             return
@@ -94,10 +102,7 @@ class LessonDetailViewController:
         """ redirect to home view when user clicked home button """
 
         # delete two views from stack => detail and home, cause home view will be rendered again
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 2)
 
         # moderator will call main window controller to render home view once again
         self._moderator.switch_view_to_main_window()
@@ -112,6 +117,9 @@ class LessonDetailViewController:
         self.collections = []
         if self.lesson:
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
+            self._view.main_header.setText(self.lesson.name)
+            self._view.lesson_name_edit.setText(self.lesson.name)
+            self._view.lesson_field_edit.setText(self.lesson.study_field)
 
         # add lesson detail view on stack
         self._stacked_widget.addWidget(self._view)
@@ -121,14 +129,10 @@ class LessonDetailViewController:
 
         self._view.grid.setContentsMargins(50, 40, 50, 20)
 
-        if self.lesson:
-            self._view.main_header.setText(self.lesson.name)
-            self._view.lesson_name_edit.setText(self.lesson.name)
-            self._view.lesson_field_edit.setText(self.lesson.study_field)
-
-        # hide delete button if there is no lesson in detail view yet
+        # hide delete/add button if there is no lesson in detail view yet
         if not self._view.lesson_name_edit.text():
             self._view.deleteButton.hide()
+            self._view.addButton.hide()
 
         # connect signal for adding new collection to slot
         self._view.addButton.clicked.connect(partial(self.add_collection_view, None))

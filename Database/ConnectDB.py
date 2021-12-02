@@ -3,8 +3,6 @@
 #   @Authors Marek Miček (xmicek08), ....
 #   @date 5.11.2021
 
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from importlib import resources

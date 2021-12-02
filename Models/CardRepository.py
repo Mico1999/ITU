@@ -1,6 +1,7 @@
 from Database.ConnectDB import DbConnection
 from Models.DbEntities import Lesson, Card, Collection
-
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy import and_
 
 class CardRepository:
     def __init__(self):
@@ -9,8 +10,8 @@ class CardRepository:
 
     def insert_card(self, card):
         try:
-            self.get_card_by_texts(card.front_text, card.back_text)
-        except:
+            self.get_card_by_id(card.id)
+        except NoResultFound:
             self.session.add(card)
 
         self.session.commit()
@@ -18,7 +19,7 @@ class CardRepository:
     def delete_card(self, card):
         try:
             self.get_card_by_id(card.id)
-        except:
+        except NoResultFound:
             raise Exception('Card does not exists!')
 
         self.session.delete(card)
@@ -27,8 +28,11 @@ class CardRepository:
     def get_card_by_id(self, _id):
         return self.session.query(Card).filter(Card.id == _id).one()
 
-    def get_card_by_texts(self, front, back):
-        return self.session.query(Card).filter(Card.front_text == front, Card.back_text == back).one()
+    def get_collection_card_by_texts(self, card):
+        return self.session.query(Card).filter(
+            and_(Card.front_text == card.front_text, Card.back_text == card.back_text),
+            Card.collection_id == card.collection_id
+        ).one()
 
     def get_all_cards(self):
         return self.session.query(Card).all()

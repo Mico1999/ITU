@@ -1,7 +1,9 @@
-from Models.DbEntities import Card
+from PyQt5.QtWidgets import *
+from Models.DbEntities import Card, Collection
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
 from Views.CardDetailView import CardDetailView
+from sqlalchemy.exc import NoResultFound
 
 
 class CardDetailViewController:
@@ -34,26 +36,78 @@ class CardDetailViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
+        # if card exists fill view with card's front and back text
+        if self.card:
+            self._view.card_front_edit.setText(self.card.front_text)
+            self._view.card_back_edit.setText(self.card.back_text)
+
+        # hide delete button if there is no card in detail view yet
+        if not self._view.card_front_edit.text() and not self._view.card_back_edit.text():
+            self._view.deleteButton.hide()
 
     def connect(self):
         # connect buttons from lesson detail views to slots
-        # self._view.saveButton.clicked.connect(self.save_collection)
-        # self._view.deleteButton.clicked.connect(self.delete_collection)
+        self._view.saveButton.clicked.connect(self.save_card)
+        self._view.deleteButton.clicked.connect(self.delete_card)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
         self._view.backButton.clicked.connect(self.redirect_back_action)
+
+    def save_card(self):
+        """ Stores new card user wants to create """
+        # Card data from input
+        card_front_string = self._view.card_front_edit.text()
+        card_back_string = self._view.card_back_edit.text()
+
+        if not card_front_string or not card_back_string:
+            QMessageBox.critical(None, "Error!", "Both card front and back page must be filled !")
+            return
+
+        new_card = Card(front_text=card_front_string, back_text=card_back_string, collection_id=self.collection.id)
+        try:
+            # Determine whether a card like this already exists for current collection
+            # (throws NoResultFound if not)
+            self._card_repository.get_collection_card_by_texts(new_card)
+        except NoResultFound:
+            # Can insert (update existing) to newly created card
+
+            if self.card: # Related card was already pulled from the database and has unique ID assigned - UPDATE
+                self.card.front_text = new_card.front_text
+                self.card.back_text = new_card.back_text
+                self._card_repository.insert_card(self.card)
+            else:
+                # Insert new (new card does not have an ID field yet)
+                self._card_repository.insert_card(new_card)
+
+            self.redirect_back_action()
+            return
+
+        # No exception raised - card like this already exists
+        QMessageBox.critical(None, "Error!", "Can not add a card which already exists !")
+
+    def delete_card(self):
+        """ Deletes card on the user demand """
+        # If card is still transient, it cannot be deleted
+        if not self.card:
+            return
+
+        warning = QMessageBox.warning(
+            None,
+            "Warning!",
+            "Do you want to delete this card completely ?\n \
+                It can not be restored !",
+            QMessageBox.Ok | QMessageBox.Cancel
+        )
+
+        if warning == QMessageBox.Ok:
+            self._card_repository.delete_card(self.card)
+
+            self.redirect_back_action()
 
     def redirect_home_action(self):
         """ redirect to home view when user clicked home button """
 
         # delete three views from stack, cause home view will be rendered again
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 4)
 
         # moderator will call main window controller to render home view once again
         self._moderator.switch_view_to_main_window()
@@ -61,12 +115,7 @@ class CardDetailViewController:
     def redirect_back_action(self):
         """ redirect to lesson detail view when user clicked delete button """
 
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
-        self._stacked_widget.removeWidget(self._stacked_widget.widget(self._stacked_widget.currentIndex()))
-        self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() - 1)
+        self._moderator.reduce_widget_stack(self._stacked_widget, 3)
 
         # moderator will call lesson detail controller to render view
         self._moderator.switch_view_to_collection_detail_view()

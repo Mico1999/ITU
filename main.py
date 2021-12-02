@@ -14,11 +14,10 @@ def main():
     app = QApplication(sys.argv)
 
     # Seed initial data, if called once, should be commented, bcs throws exception
-    #seed()
+    # seed()
 
     # create controller for main view, view is rendered in controller
-    main_window_controller = MainWindowController()
-
+    MainWindowController()
     sys.exit(app.exec_())
 
 

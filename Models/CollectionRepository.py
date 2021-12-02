@@ -1,7 +1,8 @@
+
 from Database.ConnectDB import DbConnection
 from Models.DbEntities import Lesson, Card, Collection
 from sqlalchemy import and_
-
+from sqlalchemy.exc import NoResultFound
 
 class CollectionRepository:
     def __init__(self):
@@ -10,8 +11,8 @@ class CollectionRepository:
 
     def insert_collection(self, collection):
         try:
-            get = self.get_collection_by_lesson_card_collection_name(collection)
-        except:
+            get = self.get_lesson_collection_by_name(collection)
+        except NoResultFound:
             self.session.add(collection)  # if exists update
 
         # if exists update
@@ -20,7 +21,7 @@ class CollectionRepository:
     def delete_collection(self, collection):
         try:
             self.get_collection_by_id(collection.id)
-        except:
+        except NoResultFound:
             raise Exception('Collection does not exists!')
 
         self.session.delete(collection)
@@ -29,10 +30,9 @@ class CollectionRepository:
     def get_collection_by_id(self, _id):
         return self.session.query(Collection).filter(Collection.id == _id).one()
 
-    def get_collection_by_lesson_card_collection_name(self, collection):
+    def get_lesson_collection_by_name(self, collection):
         return self.session.query(Collection)\
             .filter(and_(Collection.lesson_id == collection.lesson_id,
-                    Collection.card_id == collection.card_id,
                     Collection.collection_name == collection.collection_name)).one()
 
     def get_all_lesson_collections(self, lesson):

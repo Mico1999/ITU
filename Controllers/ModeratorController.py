@@ -1,4 +1,4 @@
-
+from PyQt5.QtWidgets import *
 
 class ModeratorController:
     """ Calls functions of view controllers to dynamically change views on the basis of triggered actions"""
@@ -40,3 +40,10 @@ class ModeratorController:
     def switch_view_to_card_detail_view(self):
         self.card_detail_controller.setup_UI()
         self.card_detail_controller.connect()
+
+    def reduce_widget_stack(self, stacked_widget, reduction_level):
+        """ Pops from widget stack to switch among views """
+
+        for i in range(reduction_level):
+            stacked_widget.removeWidget(stacked_widget.widget(stacked_widget.currentIndex()))
+            stacked_widget.setCurrentIndex(stacked_widget.currentIndex() - 1)
