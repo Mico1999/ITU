@@ -4,9 +4,10 @@ from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
+from Views.Templates.MyQDialog import MyQDialog
 
 
-class CollectionDetailView(QDialog):
+class CollectionDetailView(MyQDialog):
 
     def __init__(self):
         super(CollectionDetailView, self).__init__()

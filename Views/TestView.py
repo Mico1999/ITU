@@ -5,9 +5,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
+from Views.Templates.MyQDialog import MyQDialog
 
 
-class TestView(QDialog):
+class TestView(MyQDialog):
 
     def __init__(self):
         super(TestView, self).__init__()
