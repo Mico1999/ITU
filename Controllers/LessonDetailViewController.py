@@ -10,7 +10,7 @@ from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Models.DbEntities import Lesson, Collection
 from Views.LessonDetailView import LessonDetailView
 from Controllers.CollectionDetailViewController import CollectionDetailViewController
-
+from sqlalchemy.exc import NoResultFound
 
 class LessonDetailViewController:
 
@@ -33,6 +33,8 @@ class LessonDetailViewController:
         if lesson_name:
             self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name)
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
+
+        self._view = None
 
         self.setup_UI()
         self.connect()
@@ -59,7 +61,7 @@ class LessonDetailViewController:
         # new lesson can not be in DB already
         try:
             lesson_exists = self._lesson_repository.get_lesson_by_name(lesson_name_string)
-        except:
+        except NoResultFound:
             if self.lesson:
                 # update
                 self.lesson.name = lesson_name_string
@@ -71,6 +73,8 @@ class LessonDetailViewController:
 
                 # enable adding new collection by clicking on add button without need to render this view once again
                 self._view.addButton.show()
+                self._view.deleteButton.show()
+                # Actualize the currently shown lesson (re-fetch for generated ID after its insert)
                 self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name_string)
 
             self._view.main_header.setText(lesson_name_string)     # set main header of detail view as lesson name
