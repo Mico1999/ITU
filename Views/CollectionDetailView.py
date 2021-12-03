@@ -7,6 +7,7 @@ from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
+from Views.Templates.ScrollStyling import SCROLL_STYLING
 
 
 class CollectionDetailView(MyQDialog):
@@ -32,6 +33,7 @@ class CollectionDetailView(MyQDialog):
         self.backButton = QPushButton("Back")
         self.testButton = QPushButton("Test")
 
+        self.scroll = QScrollArea()
         self.grid = QGridLayout()
         self.addButton = QPushButton("Add card")
 
@@ -123,5 +125,15 @@ class CollectionDetailView(MyQDialog):
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
 
-        # Adding grid to layout
-        self.layout.addLayout(self.grid)
+        self.widget = QWidget()  # Widget that contains the collection of Grid
+        self.widget.setLayout(self.grid)
+        self.widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
+
+        # Scroll Area Properties
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setStyleSheet(SCROLL_STYLING)
+
+        self.layout.addWidget(self.scroll)

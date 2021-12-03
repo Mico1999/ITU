@@ -7,6 +7,7 @@ from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
+from Views.Templates.ScrollStyling import SCROLL_STYLING
 
 
 class LessonDetailView(MyQDialog):
@@ -31,7 +32,8 @@ class LessonDetailView(MyQDialog):
         self.saveButton = QPushButton("Save")
         self.deleteButton = QPushButton("Delete lesson")
         self.homeButton = QPushButton("Home")
-        
+
+        self.scroll = QScrollArea()
         self.grid = QGridLayout()
         self.addButton = QPushButton("Add collection")
 
@@ -104,7 +106,7 @@ class LessonDetailView(MyQDialog):
         self.main_header.setFont(header_font)
         self.main_header.setAlignment(Qt.AlignCenter)
 
-        # Adding widgets to alyout
+        # Adding widgets to layout
         self.layout.addWidget(self.formGroupBox)
         self.layout.addLayout(self.buttonLayout)
         self.layout.addWidget(self.main_header)
@@ -114,5 +116,15 @@ class LessonDetailView(MyQDialog):
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
 
-        # Adding grid to layout
-        self.layout.addLayout(self.grid)
+        self.widget = QWidget()  # Widget that contains the collection of Grid
+        self.widget.setLayout(self.grid)
+        self.widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
+
+        # Scroll Area Properties
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setStyleSheet(SCROLL_STYLING)
+
+        self.layout.addWidget(self.scroll)
