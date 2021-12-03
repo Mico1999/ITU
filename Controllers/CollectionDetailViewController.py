@@ -117,7 +117,7 @@ class CollectionDetailViewController:
         self._view.saveButton.clicked.connect(self.save_collection)
         self._view.deleteButton.clicked.connect(self.delete_collection)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
-        self._view.backButton.clicked.connect(self.redirect_back_action)
+        self._view.backArrow.clicked.connect(self.redirect_back_action)
         self._view.testButton.clicked.connect(self.test_action)
 
     def redirect_home_action(self):
