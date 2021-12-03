@@ -47,7 +47,7 @@ class MainWindowController:
         index = 0
         column_finished = 0
         COLUMNS = 4
-        row = -1
+        row = 0
         for i in range(len(lessons)):
             if (i % COLUMNS) == 0:
                 row = row + 1
@@ -55,11 +55,11 @@ class MainWindowController:
             else:
                 column_finished = i
 
-            self._view.grid.setColumnStretch(i % COLUMNS, 1)
-            self._view.grid.setRowStretch(row, 1)
-
             lessonButtons.append(QPushButton(lessons[i].name))
             lessonButtons[index].setStyleSheet(self._view.button_style_sheet)
+            lessonButtons[index].setMinimumSize(QSize(200, 100))
+            lessonButtons[index].setMaximumSize(QSize(600, 100))
+
             self._view.grid.addWidget(lessonButtons[index], row, (i % COLUMNS))
 
             lessonButtons[index].clicked.connect(partial(self.add_lesson_view, lessons[i].name))
@@ -73,6 +73,8 @@ class MainWindowController:
             policy = empty_buttons[index].sizePolicy()
             policy.setRetainSizeWhenHidden(True)
             empty_buttons[index].setSizePolicy(policy)
+            empty_buttons[index].setMinimumSize(QSize(200, 100))
+            empty_buttons[index].setMaximumSize(QSize(600, 100))
             self._view.grid.addWidget(empty_buttons[index], row, i)
             empty_buttons[index].hide()
             index = index + 1

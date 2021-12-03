@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
-from Views.Templates.ButtonStyling import BUTTON_STYLING, RIGHT_BUTTON, WRONG_BUTTON
+from Views.Templates.ButtonStyling import BUTTON_STYLING, RIGHT_BUTTON, WRONG_BUTTON, TOOL_STYLING
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
@@ -39,13 +39,15 @@ class CardDetailView(MyQDialog):
 
         # Navigate back button
         self.backArrow.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
-        self.backArrow.setIconSize(QtCore.QSize(50, 50))
-        self.backArrow.setStyleSheet("background-color: grey")
+        self.backArrow.setIconSize(QtCore.QSize(70, 70))
+        self.backArrow.setStyleSheet(TOOL_STYLING)
+        self.backArrow.setToolTip('Back')
 
         # Navigate home button
         self.homeButton.setIcon(QIcon(self.icon_path + 'home.png'))
-        self.homeButton.setStyleSheet("background-color: grey")
-        self.homeButton.setIconSize(QtCore.QSize(50, 50))
+        self.homeButton.setStyleSheet(TOOL_STYLING)
+        self.homeButton.setIconSize(QtCore.QSize(70, 70))
+        self.homeButton.setToolTip('Home')
 
         self.navigation_layout.addWidget(self.backArrow)
         self.navigation_layout.addWidget(self.homeButton)

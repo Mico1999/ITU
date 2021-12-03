@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 import sys
-from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON, WRONG_BUTTON, RIGHT_BUTTON
+from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON, WRONG_BUTTON, RIGHT_BUTTON, TOOL_STYLING
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
@@ -31,13 +31,12 @@ class LessonDetailView(MyQDialog):
         self.buttonLayout = QHBoxLayout()
         self.saveButton = QPushButton("Save")
         self.deleteButton = QPushButton("Delete lesson")
-        self.homeButton = QPushButton("Home")
 
         self.scroll = QScrollArea()
         self.homeButton = QToolButton()
         
         self.grid = QGridLayout()
-        self.add_button_layout = QHBoxLayout()
+        self.add_button_layout = QGridLayout()
         self.addButton = QPushButton("Add collection")
 
         self.setup_ui()
@@ -48,6 +47,8 @@ class LessonDetailView(MyQDialog):
 
         self.grid.setContentsMargins(50, 0, 50, 0)
         self.grid.setSpacing(10)
+        self.grid.setAlignment(Qt.AlignTop)
+
         # setting button font
         button_font = QFont()
         button_font.setFamily("UnShinmun")
@@ -57,8 +58,9 @@ class LessonDetailView(MyQDialog):
 
         # Navigate home button
         self.homeButton.setIcon(QIcon(self.icon_path + 'home.png'))
-        self.homeButton.setStyleSheet("background-color: grey")
-        self.homeButton.setIconSize(QtCore.QSize(50, 50))
+        self.homeButton.setStyleSheet(TOOL_STYLING)
+        self.homeButton.setIconSize(QtCore.QSize(70, 70))
+        self.homeButton.setToolTip('Home')
 
         self.navigation_layout.addWidget(self.homeButton)
         self.navigation_layout.setAlignment(Qt.AlignLeft)
@@ -113,9 +115,22 @@ class LessonDetailView(MyQDialog):
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
 
-        self.add_button_layout.addWidget(self.addButton)
-        self.add_button_layout.setContentsMargins(50, 0, 0, 0)
-        self.add_button_layout.setAlignment(Qt.AlignLeft)
+        self.add_button_layout.setSpacing(20)
+        self.add_button_layout.addWidget(self.addButton, 0, 0)
+
+        empty_buttons = []
+        index = 0
+        COLUMNS = 4
+        for i in range(COLUMNS - 1, 0, -1):
+            empty_buttons.append(QPushButton())
+            policy = empty_buttons[index].sizePolicy()
+            policy.setRetainSizeWhenHidden(True)
+            empty_buttons[index].setSizePolicy(policy)
+            self.add_button_layout.addWidget(empty_buttons[index], 0, i)
+            empty_buttons[index].hide()
+            index = index + 1
+
+        self.add_button_layout.setContentsMargins(50, 0, 50, 0)
 
         self.layout.addLayout(self.add_button_layout)
 
@@ -123,11 +138,15 @@ class LessonDetailView(MyQDialog):
         self.widget.setLayout(self.grid)
         self.widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
 
-        # Scroll Area Properties
+        self.scroll.setWidgetResizable(True)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.widget)
         self.scroll.setStyleSheet(SCROLL_STYLING)
+
+        sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        self.scroll.setSizePolicy(sizePolicy)
 
         self.layout.addWidget(self.scroll)

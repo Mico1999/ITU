@@ -136,7 +136,7 @@ class LessonDetailViewController:
         index = 0
         column_finished = 0
         COLUMNS = 4
-        row = -1
+        row = 0
         for i in range(len(self.collections)):
             if (i % COLUMNS) == 0:
                 row = row + 1
@@ -146,6 +146,8 @@ class LessonDetailViewController:
 
             self.collection_buttons.append(QPushButton(str(self.collections[i].collection_name)))
             self.collection_buttons[index].setStyleSheet(BUTTON_STYLING)
+            self.collection_buttons[index].setMinimumSize(QSize(200, 100))
+            self.collection_buttons[index].setMaximumSize(QSize(600, 100))
             self._view.grid.addWidget(self.collection_buttons[index], row,  (i % COLUMNS))
 
             self.collection_buttons[index].clicked.connect(
@@ -160,6 +162,8 @@ class LessonDetailViewController:
             policy = empty_buttons[index].sizePolicy()
             policy.setRetainSizeWhenHidden(True)
             empty_buttons[index].setSizePolicy(policy)
+            empty_buttons[index].setMinimumSize(QSize(200, 100))
+            empty_buttons[index].setMaximumSize(QSize(600, 100))
             self._view.grid.addWidget(empty_buttons[index], row, i)
             empty_buttons[index].hide()
             index = index + 1

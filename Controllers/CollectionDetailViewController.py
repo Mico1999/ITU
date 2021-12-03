@@ -7,6 +7,7 @@ from Models.DbEntities import Collection
 from functools import partial
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from Controllers.CardDetailViewController import CardDetailViewController
 from Views.Templates.MyButton import MyButton
 from sqlalchemy.exc import NoResultFound
@@ -69,7 +70,7 @@ class CollectionDetailViewController:
 
         index = 0
         column_finished = 0
-        row = -1
+        row = 0
         COLUMNS = 4
         for i in range(len(self.cards)):
             if (i % COLUMNS) == 0:
@@ -80,8 +81,9 @@ class CollectionDetailViewController:
 
             button = MyButton(self.cards[i].front_text, self.cards[i].back_text)
             self.card_buttons.append(button)
-
             self.card_buttons[index].setStyleSheet(BUTTON_STYLING)
+            self.card_buttons[index].setMinimumSize(QSize(200, 100))
+            self.card_buttons[index].setMaximumSize(QSize(600, 100))
             self._view.grid.addWidget(self.card_buttons[index], row, (i % COLUMNS))
 
             self.card_buttons[index].clicked.connect(
@@ -96,6 +98,8 @@ class CollectionDetailViewController:
             policy = empty_buttons[index].sizePolicy()
             policy.setRetainSizeWhenHidden(True)
             empty_buttons[index].setSizePolicy(policy)
+            empty_buttons[index].setMinimumSize(QSize(200, 100))
+            empty_buttons[index].setMaximumSize(QSize(600, 100))
             self._view.grid.addWidget(empty_buttons[index], row, i)
             empty_buttons[index].hide()
             index = index + 1
