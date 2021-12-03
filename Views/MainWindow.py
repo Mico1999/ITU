@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
-from Views.Templates.ButtonStyling import BUTTON_STYLING
+from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON
 from Views.Templates.ScrollStyling import SCROLL_STYLING
 from Views.Templates.MyQLabel import MyQLabel
 
@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
         self.icon_path = 'Views/Assets/' if sys.platform.startswith('linux') else 'Views\\Assets\\'
         self.setMinimumWidth(1200)
         self.setMinimumHeight(800)
+        self.add_button_layout = QHBoxLayout()
         self.addButton = QPushButton("Add lesson")
         self.label = QLabel()
         self.setStyleSheet("QMainWindow{background-color:  #FBF08A;}")
@@ -30,7 +31,8 @@ class MainWindow(QMainWindow):
 
     def setup_ui(self):
 
-        self.grid.setContentsMargins(50, 40, 50, 20)
+        self.grid.setContentsMargins(50, 0, 50, 0)
+        self.grid.setSpacing(10)
 
         # set font for buttons
         button_font = QFont()
@@ -42,14 +44,19 @@ class MainWindow(QMainWindow):
 
         # Create buttons
         self.addButton.setFont(button_font)
-        self.addButton.setStyleSheet(self.button_style_sheet)
+        self.addButton.setStyleSheet(ADD_BUTTON)
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
+        self.addButton.setFixedWidth(50)
+
+        self.add_button_layout.addWidget(self.addButton)
+        self.add_button_layout.setContentsMargins(50, 0, 0, 0)
+        self.add_button_layout.setAlignment(Qt.AlignLeft)
 
         # set font for header
         header_font = QFont()
-        header_font.setFamily("Monaco")
-        header_font.setPointSize(35)
+        header_font.setFamily("Footlight MT Light")
+        header_font.setPointSize(60)
         header_font.setBold(True)
         header_font.setWeight(50)
 
@@ -71,4 +78,5 @@ class MainWindow(QMainWindow):
         self.scroll.setStyleSheet(SCROLL_STYLING)
 
         self.layout.addWidget(self.label)
+        self.layout.addLayout(self.add_button_layout)
         self.layout.addWidget(self.scroll)

@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
-from Views.Templates.ButtonStyling import BUTTON_STYLING
+from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
@@ -35,6 +35,7 @@ class LessonDetailView(MyQDialog):
 
         self.scroll = QScrollArea()
         self.grid = QGridLayout()
+        self.add_button_layout = QHBoxLayout()
         self.addButton = QPushButton("Add collection")
 
         self.setup_ui()
@@ -42,6 +43,9 @@ class LessonDetailView(MyQDialog):
 
     def setup_ui(self):
         """Setup the Add Lesson GUI."""
+
+        self.grid.setContentsMargins(50, 0, 50, 0)
+        self.grid.setSpacing(10)
 
         # Form labels and edits
         self.name_label.setText("Lesson Name:")
@@ -112,9 +116,15 @@ class LessonDetailView(MyQDialog):
         self.layout.addWidget(self.main_header)
 
         # Add new collection button
-        self.addButton.setStyleSheet(BUTTON_STYLING)
+        self.addButton.setStyleSheet(ADD_BUTTON)
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
+
+        self.add_button_layout.addWidget(self.addButton)
+        self.add_button_layout.setContentsMargins(50, 0, 0, 0)
+        self.add_button_layout.setAlignment(Qt.AlignLeft)
+
+        self.layout.addLayout(self.add_button_layout)
 
         self.widget = QWidget()  # Widget that contains the collection of Grid
         self.widget.setLayout(self.grid)

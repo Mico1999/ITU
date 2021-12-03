@@ -6,7 +6,7 @@ class MyQLabel(QLabel):
     def __init__(self):
         super(QLabel, self).__init__()
         self.setStyleSheet(LABEL_STYLING)
-        self.setFont(QFont('Monaco', 20))
+        self.setFont(QFont("Monaco", 20))
 
 LABEL_STYLING="""
     QLabel{

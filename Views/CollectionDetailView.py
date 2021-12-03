@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
 import sys
-from Views.Templates.ButtonStyling import BUTTON_STYLING
+from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
@@ -35,11 +35,14 @@ class CollectionDetailView(MyQDialog):
 
         self.scroll = QScrollArea()
         self.grid = QGridLayout()
+        self.add_button_layout = QHBoxLayout()
         self.addButton = QPushButton("Add card")
 
         self.setup_UI()
 
     def setup_UI(self):
+        self.grid.setContentsMargins(50, 0, 50, 0)
+        self.grid.setSpacing(10)
 
         # Form labels and edits
         self.name_label.setText("Collection Name:")
@@ -121,9 +124,13 @@ class CollectionDetailView(MyQDialog):
         self.layout.addWidget(self.main_header)
 
         # Add new card button
-        self.addButton.setStyleSheet(BUTTON_STYLING)
+        self.addButton.setStyleSheet(ADD_BUTTON)
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
+
+        self.add_button_layout.setContentsMargins(50, 0, 0, 0)
+        self.add_button_layout.setAlignment(Qt.AlignLeft)
+        self.add_button_layout.addWidget(self.addButton)
 
         self.widget = QWidget()  # Widget that contains the collection of Grid
         self.widget.setLayout(self.grid)
@@ -136,4 +143,5 @@ class CollectionDetailView(MyQDialog):
         self.scroll.setWidget(self.widget)
         self.scroll.setStyleSheet(SCROLL_STYLING)
 
+        self.layout.addLayout(self.add_button_layout)
         self.layout.addWidget(self.scroll)

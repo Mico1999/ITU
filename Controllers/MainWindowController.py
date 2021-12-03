@@ -47,10 +47,9 @@ class MainWindowController:
         index = 0
         column_finished = 0
         COLUMNS = 4
-        row = 0
-        self._view.grid.addWidget(self._view.addButton, 0, 0)
+        row = -1
         for i in range(len(lessons)):
-            if (i % COLUMNS) == COLUMNS - 1:
+            if (i % COLUMNS) == 0:
                 row = row + 1
                 column_finished = 0
             else:
@@ -61,10 +60,7 @@ class MainWindowController:
 
             lessonButtons.append(QPushButton(lessons[i].name))
             lessonButtons[index].setStyleSheet(self._view.button_style_sheet)
-            if row == 0:
-                self._view.grid.addWidget(lessonButtons[index], 0, (i + 1) % COLUMNS)
-            else:
-                self._view.grid.addWidget(lessonButtons[index], row, ((i - (COLUMNS - 1)) % COLUMNS))
+            self._view.grid.addWidget(lessonButtons[index], row, (i % COLUMNS))
 
             lessonButtons[index].clicked.connect(partial(self.add_lesson_view, lessons[i].name))
             index = index + 1

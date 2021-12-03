@@ -127,8 +127,6 @@ class LessonDetailViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
-        self._view.grid.setContentsMargins(50, 40, 50, 20)
-
         # hide delete/add button if there is no lesson in detail view yet
         if not self._view.lesson_name_edit.text():
             self._view.deleteButton.hide()
@@ -139,11 +137,10 @@ class LessonDetailViewController:
 
         index = 0
         column_finished = 0
-        row = 0
         COLUMNS = 4
-        self._view.grid.addWidget(self._view.addButton, 0, 0)
+        row = -1
         for i in range(len(self.collections)):
-            if (i % COLUMNS) == COLUMNS - 1:
+            if (i % COLUMNS) == 0:
                 row = row + 1
                 column_finished = 0
             else:
@@ -151,10 +148,7 @@ class LessonDetailViewController:
 
             self.collection_buttons.append(QPushButton(str(self.collections[i].collection_name)))
             self.collection_buttons[index].setStyleSheet(BUTTON_STYLING)
-            if row == 0:
-                self._view.grid.addWidget(self.collection_buttons[index], 0, (i + 1) % COLUMNS)
-            else:
-                self._view.grid.addWidget(self.collection_buttons[index], row,  ((i - (COLUMNS - 1)) % COLUMNS))
+            self._view.grid.addWidget(self.collection_buttons[index], row,  (i % COLUMNS))
 
             self.collection_buttons[index].clicked.connect(
                 partial(self.add_collection_view, self.collections[index].id))

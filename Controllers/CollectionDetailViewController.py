@@ -50,8 +50,6 @@ class CollectionDetailViewController:
         # increase index of stack to see detail view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
-        self._view.grid.setContentsMargins(50, 40, 50, 20)
-
         self.card_buttons = []
         self.cards = []
         if self.collection:
@@ -72,11 +70,10 @@ class CollectionDetailViewController:
 
         index = 0
         column_finished = 0
-        row = 0
+        row = -1
         COLUMNS = 4
-        self._view.grid.addWidget(self._view.addButton, 0, 0)
         for i in range(len(self.cards)):
-            if (i % COLUMNS) == COLUMNS - 1:
+            if (i % COLUMNS) == 0:
                 row = row + 1
                 column_finished = 0
             else:
@@ -86,10 +83,7 @@ class CollectionDetailViewController:
             self.card_buttons.append(button)
 
             self.card_buttons[index].setStyleSheet(BUTTON_STYLING)
-            if row == 0:
-                self._view.grid.addWidget(self.card_buttons[index], 0, (i + 1) % COLUMNS)
-            else:
-                self._view.grid.addWidget(self.card_buttons[index], row, ((i - (COLUMNS - 1)) % COLUMNS))
+            self._view.grid.addWidget(self.card_buttons[index], row, (i % COLUMNS))
 
             self.card_buttons[index].clicked.connect(
                 partial(self.add_card_view, self.collection.id, self.cards[index].id))

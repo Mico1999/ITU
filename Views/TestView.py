@@ -49,9 +49,9 @@ class TestView(MyQDialog):
         self.cancelButton.setIcon(QIcon(self.icon_path + 'cancel.png'))
         self.cancelButton.setIconSize(QtCore.QSize(50, 50))
 
-        self.front_label.setFont(button_font)
+        self.front_label.setFont(QFont("Footlight MT Light", 40))
         self.front_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.back_label.setFont(button_font)
+        self.back_label.setFont(QFont("Footlight MT Light", 40))
         self.back_label.setAlignment(QtCore.Qt.AlignCenter)
 
         # label should remain size when hidden
@@ -60,7 +60,7 @@ class TestView(MyQDialog):
         self.back_label.setSizePolicy(policy)
     
         self.label_layout.addWidget(self.front_label)
-        self.label_layout.setSpacing(20)
+        self.label_layout.setSpacing(40)
         self.label_layout.addWidget(self.back_label)
         self.label_layout.setAlignment(Qt.AlignCenter)
 
