@@ -55,7 +55,6 @@ class CollectionDetailViewController:
         self.card_buttons = []
         self.cards = []
         if self.collection:
-            self._view.main_header.setText(self.collection.collection_name)
             self._view.collection_name_edit.setText(self.collection.collection_name)
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
             self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
@@ -152,7 +151,6 @@ class CollectionDetailViewController:
             collection_exists = self._collection_repository\
                 .get_lesson_collection_by_name(new_collection)
         except NoResultFound:  # Insert it
-            self._view.main_header.setText(collection_name_string)  # set main header of detail view as collection name
             if self.collection:
                 self.collection.collection_name = collection_name_string
                 self._collection_repository.insert_collection(self.collection)
