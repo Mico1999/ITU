@@ -77,7 +77,6 @@ class LessonDetailViewController:
                 # Actualize the currently shown lesson (re-fetch for generated ID after its insert)
                 self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name_string)
 
-            self._view.main_header.setText(lesson_name_string)     # set main header of detail view as lesson name
             return
 
         # lesson already exists
@@ -117,7 +116,6 @@ class LessonDetailViewController:
         self.collections = []
         if self.lesson:
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
-            self._view.main_header.setText(self.lesson.name)
             self._view.lesson_name_edit.setText(self.lesson.name)
             self._view.lesson_field_edit.setText(self.lesson.study_field)
 
