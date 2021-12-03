@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING
 from Views.Templates.MyQDialog import MyQDialog
@@ -25,11 +25,14 @@ class CollectionDetailView(MyQDialog):
 
         self.main_header = MyQLabel()
 
+        self.navigation_layout = QHBoxLayout()
+        self.arrow_layout = QHBoxLayout()
         self.buttonLayout = QHBoxLayout()
+
+        self.backArrow = QToolButton()
         self.saveButton = QPushButton("Save")
         self.deleteButton = QPushButton("Delete collection")
         self.homeButton = QPushButton("Home")
-        self.backButton = QPushButton("Back")
         self.testButton = QPushButton("Test")
 
         self.grid = QGridLayout()
@@ -76,10 +79,11 @@ class CollectionDetailView(MyQDialog):
         self.deleteButton.setIconSize(QtCore.QSize(50, 50))
 
         # Navigate back button
-        self.backButton.setFont(button_font)
-        self.backButton.setStyleSheet(BUTTON_STYLING)
-        self.backButton.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
-        self.backButton.setIconSize(QtCore.QSize(50, 50))
+        self.backArrow.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
+        self.backArrow.setIconSize(QtCore.QSize(50, 50))
+        self.backArrow.setStyleSheet("background-color: blue")
+        self.arrow_layout.addWidget(self.backArrow)
+        self.arrow_layout.setAlignment(Qt.AlignLeft)
 
         # Navigate home button
         self.homeButton.setFont(button_font)
@@ -97,10 +101,11 @@ class CollectionDetailView(MyQDialog):
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.homeButton)
         self.buttonLayout.setSpacing(20)
-        self.buttonLayout.addWidget(self.backButton)
-        self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.deleteButton)
         self.buttonLayout.setAlignment(Qt.AlignRight)
+
+        self.navigation_layout.addLayout(self.arrow_layout)
+        self.navigation_layout.addLayout(self.buttonLayout)
 
         # set font for header
         header_font = QFont()
@@ -115,7 +120,7 @@ class CollectionDetailView(MyQDialog):
 
         # Adding widgets to layout
         self.layout.addWidget(self.formGroupBox)
-        self.layout.addLayout(self.buttonLayout)
+        self.layout.addLayout(self.navigation_layout)
         self.layout.addWidget(self.main_header)
 
         # Add new card button

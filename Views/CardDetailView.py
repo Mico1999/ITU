@@ -25,11 +25,14 @@ class CardDetailView(MyQDialog):
         self.front_label = MyQLabel()
         self.back_label = MyQLabel()
 
+        self.navigation_layout = QHBoxLayout()
+        self.arrow_layout = QHBoxLayout()
         self.buttonLayout = QHBoxLayout()
+
+        self.backArrow = QToolButton()
         self.saveButton = QPushButton("Save")
         self.deleteButton = QPushButton("Delete card")
         self.homeButton = QPushButton("Home")
-        self.backButton = QPushButton("Back")
 
         self.setup_UI()
 
@@ -77,10 +80,11 @@ class CardDetailView(MyQDialog):
         self.deleteButton.setIconSize(QtCore.QSize(50, 50))
 
         # Navigate back button
-        self.backButton.setFont(button_font)
-        self.backButton.setStyleSheet(BUTTON_STYLING)
-        self.backButton.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
-        self.backButton.setIconSize(QtCore.QSize(50, 50))
+        self.backArrow.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
+        self.backArrow.setIconSize(QtCore.QSize(50, 50))
+        self.backArrow.setStyleSheet("background-color: blue")
+        self.arrow_layout.addWidget(self.backArrow)
+        self.arrow_layout.setAlignment(Qt.AlignLeft)
 
         # Navigate home button
         self.homeButton.setFont(button_font)
@@ -90,11 +94,14 @@ class CardDetailView(MyQDialog):
 
         self.buttonLayout.addWidget(self.homeButton)
         self.buttonLayout.setSpacing(20)
-        self.buttonLayout.addWidget(self.backButton)
+        self.buttonLayout.addWidget(self.backArrow)
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.deleteButton)
         self.buttonLayout.setAlignment(Qt.AlignRight)
 
+        self.navigation_layout.addLayout(self.arrow_layout)
+        self.navigation_layout.addLayout(self.buttonLayout)
+
         # Adding widgets to layout
         self.layout.addWidget(self.formGroupBox)
-        self.layout.addLayout(self.buttonLayout)
+        self.layout.addLayout(self.navigation_layout)
