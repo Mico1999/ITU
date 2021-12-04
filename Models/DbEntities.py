@@ -1,15 +1,15 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime
+import datetime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship, backref
 
 Base = declarative_base()
 
-
-""" 
-Lesson mapping:
-    Lesson -> one-to-many <- Collection
-"""
 class Lesson(Base):
+    """
+    Lesson mapping:
+        Lesson -> one-to-many <- Collection
+    """
     __tablename__ = 'lesson'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -20,12 +20,14 @@ class Lesson(Base):
             self.name, self.study_field)
 
 
-""" 
-Collection mapping:
-    Collection -> many-to-one <- Lesson
-    Collection -> one-to-many <- Card
-"""
 class Collection(Base):
+    """
+    Collection mapping:
+        Collection -> many-to-one <- Lesson
+        Collection -> one-to-many <- Card
+
+        Collection -> one-to-many <- CollectionTestResult
+    """
     __tablename__ = 'collection'
     id = Column(Integer, primary_key=True)
     collection_name = Column(String)
@@ -36,11 +38,33 @@ class Collection(Base):
             self.collection_name)
 
 
-"""
-Card mapping:
-    Card -> many-to-one <- Collection
-"""
+class CollectionTestResult(Base):
+    """
+    CollectionTestResult mapping:
+        CollectionTestResult -> many-to-one <- Collection
+    """
+    __tablename__ = 'collection_test_result'
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime, default=datetime.datetime.now)
+    cards = Column(Integer)
+    correct_answers = Column(Integer)
+    times_flipped = Column(Integer)
+    collection_id = Column(Integer, ForeignKey("collection.id"))
+
+    def __repr__(self):
+        return f"<CollectionTestResult("\
+                   f"date={self.date}, "\
+                   f"cards={self.cards}, " \
+                   f"correct_answers={self.correct_answers}, " \
+                   f"times_flipped={self.times_flipped}" \
+               f")>"
+
+
 class Card(Base):
+    """
+    Card mapping:
+        Card -> many-to-one <- Collection
+    """
     __tablename__ = 'card'
     id = Column(Integer, primary_key=True)
     front_text = Column(String)
@@ -50,4 +74,3 @@ class Card(Base):
     def __repr__(self):
         return "<Card(front_text='%s', back_text='%s')>" % (
             self.front_text, self.back_text)
-
