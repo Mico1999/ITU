@@ -4,3 +4,10 @@
 * Peter Rúček, xrucek00
 * Marek Miček, xmicek08
 * Matej Jurík, xjurik12
+
+### Inštalácia
+* Python3
+* Knižnice popísané v [requirements.txt](./requirements.txt)
+
+### Spustenie
+**python main.py**
