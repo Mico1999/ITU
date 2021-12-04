@@ -45,7 +45,7 @@ class TestResultsViewController:
 
     def connect(self):
         self._view.homeButton.clicked.connect(self.redirect_home_action)
-        self._view.backArrow.clicked.connect(self.redirect_back_action)
+        self._view.finish_test_button.clicked.connect(self.redirect_back_action)
         self._view.retry_test_button.clicked.connect(self.retry_test_action)
 
     def redirect_back_action(self):

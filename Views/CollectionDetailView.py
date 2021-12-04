@@ -1,3 +1,8 @@
+#   Views/CollectionDetailView.py module
+#   Implements static layout of collection detail
+#   @Authors Marek Miček (xmicek08), Peter Rúček (xrucek00), Marej Jurík (xjurik12)
+#   @date 28.11.2021
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -82,13 +87,13 @@ class CollectionDetailView(MyQDialog):
         self.form_layout.addWidget(self.collection_name_edit)
         self.form_layout.setContentsMargins(20, 0, 20, 0)
 
-        # Save collection buttton
+        # Save collection button
         self.saveButton.setFont(button_font)
         self.saveButton.setStyleSheet(SAVE_BUTTON)
         self.saveButton.setIcon(QIcon(self.icon_path + 'save.png'))
         self.saveButton.setIconSize(QtCore.QSize(50, 50))
 
-        # Delete collection buttton
+        # Delete collection button
         self.deleteButton.setFont(button_font)
         self.deleteButton.setStyleSheet(DELETE_BUTTON)
         self.deleteButton.setIcon(QIcon(self.icon_path + 'delete.png'))
@@ -108,7 +113,7 @@ class CollectionDetailView(MyQDialog):
         self.buttonLayout.setContentsMargins(20, 0, 20, 0)
         self.buttonLayout.setAlignment(Qt.AlignRight)
 
-        # Adding widgets to layout
+        # Adding widgets to global layout
         self.layout.addLayout(self.navigation_layout)
         self.layout.addLayout(self.form_layout)
         self.layout.addLayout(self.buttonLayout)
