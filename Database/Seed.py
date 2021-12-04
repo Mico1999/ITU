@@ -29,8 +29,8 @@ def seed():
         cards=19, correct_answers=10, times_flipped=6, collection_id=3))
 
     card_repo = CardRepository()
-    card_repo.insert_card(Card(front_text="Ahoj", back_text="Hola", collection_id=1))
+    card_repo.insert_card(Card(front_text="Ahoj", back_text="Hola", collection_id=1, remembered=False))
     card_repo.insert_card(Card(front_text="Pes", back_text="Perro", collection_id=2))
-    card_repo.insert_card(Card(front_text="Hosani", back_text="Ragazzi", collection_id=3))
-    card_repo.insert_card(Card(front_text="Arterie vertebralis", back_text="wtf", collection_id=4))
+    card_repo.insert_card(Card(front_text="Hosani", back_text="Ragazzi", collection_id=3, remembered=True))
+    card_repo.insert_card(Card(front_text="Arterie vertebralis", back_text="wtf", collection_id=4, remembered=True))
     card_repo.insert_card(Card(front_text="2+2", back_text="4", collection_id=5))

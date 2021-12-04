@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 import datetime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship, backref
@@ -69,6 +69,7 @@ class Card(Base):
     id = Column(Integer, primary_key=True)
     front_text = Column(String)
     back_text = Column(String)
+    remembered = Column(Boolean, default=False)
     collection_id = Column(Integer, ForeignKey("collection.id"))
 
     def __repr__(self):
