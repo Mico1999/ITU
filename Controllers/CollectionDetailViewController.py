@@ -38,6 +38,8 @@ class CollectionDetailViewController:
         if lesson_id: # self.lesson cannot stay None
             self.lesson = self._lesson_repository.get_lesson_by_id(lesson_id)
 
+        self.test_controller = None
+
         self.setup_UI()
         self.connect()
 
