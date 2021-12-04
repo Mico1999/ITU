@@ -1,6 +1,8 @@
 from PyQt5.QtCore import QEventLoop
 from Models.CollectionRepository import CollectionRepository
 from Models.CardRepository import CardRepository
+from Models.CollectionTestResultRepository import CollectionTestResultRepository
+from Models.DbEntities import CollectionTestResult
 from Views.TestView import TestView
 from Controllers.TestResultsViewController import TestResultsViewController
 import random
@@ -12,6 +14,7 @@ class TestViewController:
         # Repositories
         self._collection_repository = CollectionRepository()
         self._card_repository = CardRepository()
+        self._collection_test_result_repository = CollectionTestResultRepository()
 
         self._stacked_widget = stacked_widget
 
@@ -81,7 +84,8 @@ class TestViewController:
         self.next_card()
 
     def flipped_before_answer(self):
-        self.testResults["flipped"] += 1
+        if self._view.back_label.isHidden():
+            self.testResults["flipped"] += 1
         self.flip_card()
 
     def next_card(self):
@@ -102,6 +106,15 @@ class TestViewController:
         self._view.back_label.setHidden(False)
 
     def conclude_test(self):
+        # Save test results
+        test_results_data = CollectionTestResult(
+            cards=self.all_cards_count,
+            correct_answers=self.testResults["correct"],
+            times_flipped=self.testResults["flipped"],
+            collection_id=self.collection.id)
+        self._collection_test_result_repository.insert(test_results_data)
+
+        # Render test results view
         self.test_results_controller = TestResultsViewController(
             self._moderator,
             self._stacked_widget,

@@ -1,6 +1,7 @@
 from Models.LessonRepository import LessonRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
+from Models.CollectionTestResultRepository import CollectionTestResultRepository
 from Views.CollectionDetailView import CollectionDetailView
 from PyQt5.QtWidgets import QMessageBox
 from Models.DbEntities import Collection
@@ -21,12 +22,15 @@ class CollectionDetailViewController:
         self._lesson_repository = LessonRepository()
         self._collection_repository = CollectionRepository()
         self._card_repository = CardRepository()
+        self._collection_test_result_repository = CollectionTestResultRepository()
 
         self._stacked_widget = stacked_widget
 
         # init moderator which will be dynamically calling controllers to override views if needed
         self._moderator = moderator
         self._moderator.add_collection_detail_controller(self)
+
+        self._view = None
 
         self.cards = []  # All cards in current collection
         self.card_buttons = []
@@ -39,6 +43,7 @@ class CollectionDetailViewController:
             self.lesson = self._lesson_repository.get_lesson_by_id(lesson_id)
 
         self.test_controller = None
+        self.latest_test_results = None
 
         self.setup_UI()
         self.connect()
@@ -59,6 +64,16 @@ class CollectionDetailViewController:
             self._view.collection_name_edit.setText(self.collection.collection_name)
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
             self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
+
+            # Show latest taken test's results
+            self.latest_test_results = \
+                self._collection_test_result_repository.get_latest_by_collection(self.collection) or None
+            if self.latest_test_results:
+                self._view.last_results_label.setText(
+                    f"Latest test result: {self.latest_test_results.correct_answers}/{self.latest_test_results.cards} "
+                    f"correct answers, cards flipped {self.latest_test_results.times_flipped} times"
+                )
+                self._view.last_results_label.setHidden(False)
 
         # hide delete/add button if there is no collection in detail view yet
         if not self._view.collection_name_edit.text():

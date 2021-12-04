@@ -38,6 +38,8 @@ class CollectionDetailView(MyQDialog):
         self.add_button_layout = QGridLayout()
         self.addButton = QPushButton(" Add card")
 
+        self.last_results_label = MyQLabel()
+
         self.setup_UI()
 
     def setup_UI(self):
@@ -115,9 +117,14 @@ class CollectionDetailView(MyQDialog):
         self.addButton.setStyleSheet(ADD_BUTTON)
         self.addButton.setIcon(QIcon(self.icon_path + 'plus.png'))
         self.addButton.setIconSize(QtCore.QSize(50, 50))
+        self.add_button_layout.setSpacing(20)
+
+        # Last results label
+        self.last_results_label.setHidden(True)
 
         self.add_button_layout.setSpacing(20)
         self.add_button_layout.addWidget(self.addButton, 0, 0)
+        self.add_button_layout.addWidget(self.last_results_label, 0, 1)
 
         empty_buttons = []
         index = 0
