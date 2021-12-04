@@ -5,7 +5,6 @@ from PyQt5 import QtCore
 import sys
 from Views.Templates.ButtonStyling import BUTTON_STYLING, ADD_BUTTON
 from Views.Templates.ScrollStyling import SCROLL_STYLING
-from Views.Templates.MyQLabel import MyQLabel
 
 
 class MainWindow(QMainWindow):
@@ -23,13 +22,13 @@ class MainWindow(QMainWindow):
         self.setMinimumWidth(1300)
         self.setMinimumHeight(800)
         self.add_button_layout = QGridLayout()
-        self.addButton = QPushButton("Add lesson")
-        self.label = QLabel()
+        self.addButton = QPushButton(" Add lesson")
+        self.title_label = QLabel()
         self.setStyleSheet("QMainWindow{background-color:  #FBF08A;}")
 
-        self.setup_ui()
+        self.setup_UI()
 
-    def setup_ui(self):
+    def setup_UI(self):
 
         self.grid.setContentsMargins(50, 0, 50, 0)
         self.grid.setSpacing(10)
@@ -37,7 +36,7 @@ class MainWindow(QMainWindow):
 
         # set font for buttons
         button_font = QFont()
-        button_font.setFamily("UnShinmun")
+        button_font.setFamily("Monaco")
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
@@ -64,7 +63,7 @@ class MainWindow(QMainWindow):
             empty_buttons[index].hide()
             index = index + 1
 
-        self.add_button_layout.setContentsMargins(50, 0, 50, 20)
+        self.add_button_layout.setContentsMargins(50, 0, 50, 0)
 
         # set font for header
         header_font = QFont()
@@ -74,27 +73,30 @@ class MainWindow(QMainWindow):
         header_font.setWeight(50)
 
         # MainWindow header
-        self.label.setText("StudyDex")
-        self.label.setAlignment(Qt.AlignCenter)
-        self.label.setFont(header_font)
-        self.label.setMargin(100)
+        self.title_label.setText("StudyDex")
+        self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setFont(header_font)
+        self.title_label.setMargin(100)
 
-        self.widget = QWidget()  # Widget that contains the collection of Grid
-        self.widget.setLayout(self.grid)
-        self.widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
+        widget = QWidget()  # Widget that contains the collection of Grid
+        widget.setLayout(self.grid)
+        widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
 
         # Scroll Area Properties
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.widget)
+        self.scroll.setWidget(widget)
         self.scroll.setStyleSheet(SCROLL_STYLING)
+        self.scroll.setMinimumHeight(330)
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         self.scroll.setSizePolicy(sizePolicy)
 
-        self.layout.addWidget(self.label)
-        self.layout.addLayout(self.add_button_layout)
-        self.layout.addWidget(self.scroll)
+        self.layout.addWidget(self.title_label)
+        button_widget = QWidget()
+        button_widget.setLayout(self.add_button_layout)
+        self.layout.addWidget(button_widget, alignment=Qt.AlignBottom)
+        self.layout.addWidget(self.scroll, alignment=Qt.AlignBottom)

@@ -30,8 +30,8 @@ class CardDetailView(MyQDialog):
 
         self.backArrow = QToolButton()
         self.homeButton = QToolButton()
-        self.saveButton = QPushButton("Save")
-        self.deleteButton = QPushButton("Delete card")
+        self.saveButton = QPushButton(" Save")
+        self.deleteButton = QPushButton(" Delete card")
 
         self.setup_UI()
 
@@ -80,7 +80,7 @@ class CardDetailView(MyQDialog):
 
         # setting home and delete button
         button_font = QFont()
-        button_font.setFamily("UnShinmun")
+        button_font.setFamily("Monaco")
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)

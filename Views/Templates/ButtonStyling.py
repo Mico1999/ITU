@@ -71,7 +71,7 @@ ADD_BUTTON = "QPushButton {" \
             "border-color: gray;" \
             "font: bold 20px;" \
             "min-width: 10em;" \
-            "padding: 50px 20px; " \
+            "padding: 30px 20px; " \
             "}" \
             "QPushButton:pressed { " \
             "border-style: inset;" \
@@ -88,7 +88,7 @@ TEST_BUTTON = "QPushButton {" \
             "border-color: gray;" \
             "font: bold 20px;" \
             "min-width: 10em;" \
-            "padding: 50px 20px; " \
+            "padding: 30px 20px; " \
             "}" \
             "QPushButton:pressed { " \
             "border-style: inset;" \
@@ -105,4 +105,55 @@ TOOL_STYLING = "QToolButton {" \
             "}" \
             "QPushButton:hover { " \
             "border-style: inset;" \
+            "}"
+
+DELETE_BUTTON = "QPushButton {" \
+            "background-color:qlineargradient(x1:0, y1:0, x2:1, y2:1,stop:0 white, stop: 0.99 red, stop:1 white);" \
+            "border-style: outset;" \
+            "border-width: 2px;" \
+            "border-radius: 10px;" \
+            "border-color: gray;" \
+            "font: bold 20px;" \
+            "min-width: 10em;" \
+            "padding: 30px 20px; " \
+            "}" \
+            "QPushButton:pressed { " \
+            "border-style: inset;" \
+            "}" \
+            "QPushButton:hover { " \
+            "background-color: darkred;" \
+            "}"
+
+SAVE_BUTTON = "QPushButton {" \
+            "background-color:qlineargradient(x1:0, y1:0, x2:1, y2:1,stop:0 white, stop: 0.99 green, stop:1 white);" \
+            "border-style: outset;" \
+            "border-width: 2px;" \
+            "border-radius: 10px;" \
+            "border-color: gray;" \
+            "font: bold 20px;" \
+            "min-width: 10em;" \
+            "padding: 30px 20px; " \
+            "}" \
+            "QPushButton:pressed { " \
+            "border-style: inset;" \
+            "}" \
+            "QPushButton:hover { " \
+            "background-color: darkgreen;" \
+            "}"
+
+TEST_VIEW_BUTTONS = "QPushButton {" \
+            "background-color:qlineargradient(x1:0, y1:0, x2:1, y2:1,stop:0 white, stop: 0.99 orange, stop:1 white);" \
+            "border-style: outset;" \
+            "border-width: 2px;" \
+            "border-radius: 10px;" \
+            "border-color: gray;" \
+            "font: bold 20px;" \
+            "min-width: 10em;" \
+            "padding: 50px 20px; " \
+            "}" \
+            "QPushButton:pressed { " \
+            "border-style: inset;" \
+            "}" \
+            "QPushButton:hover { " \
+            "background-color: darkorange;" \
             "}"

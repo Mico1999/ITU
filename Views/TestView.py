@@ -1,4 +1,4 @@
-from Views.Templates.ButtonStyling import BUTTON_STYLING, WRONG_BUTTON, RIGHT_BUTTON
+from Views.Templates.ButtonStyling import TEST_VIEW_BUTTONS, WRONG_BUTTON, RIGHT_BUTTON
 from Views.Templates.ProgressBarStyling import DEFAULT_STYLE
 import sys
 from PyQt5.QtWidgets import *
@@ -20,22 +20,22 @@ class TestView(MyQDialog):
 
         self.buttonLayoutTop = QHBoxLayout()
         self.progress = QProgressBar()
-        self.cancelButton = QPushButton("Cancel test")
+        self.cancelButton = QPushButton(" Cancel test")
 
         self.label_layout = QVBoxLayout()
         self.front_label = MyQLabel()
         self.back_label = MyQLabel()
 
         self.buttonLayoutBottom = QHBoxLayout()
-        self.rightButton = QPushButton("I know it")
-        self.wrongButton = QPushButton("I do not know it")
-        self.flipButton = QPushButton("Flip card")
+        self.rightButton = QPushButton(" I know it")
+        self.wrongButton = QPushButton(" I do not know it")
+        self.flipButton = QPushButton(" Flip card")
 
         self.setup_UI()
 
     def setup_UI(self):
         button_font = QFont()
-        button_font.setFamily("UnShinmun")
+        button_font.setFamily("Monaco")
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
@@ -45,13 +45,13 @@ class TestView(MyQDialog):
 
         # Cancel test button
         self.cancelButton.setFont(button_font)
-        self.cancelButton.setStyleSheet(BUTTON_STYLING)
+        self.cancelButton.setStyleSheet(TEST_VIEW_BUTTONS)
         self.cancelButton.setIcon(QIcon(self.icon_path + 'cancel.png'))
         self.cancelButton.setIconSize(QtCore.QSize(50, 50))
 
-        self.front_label.setFont(QFont("Footlight MT Light", 40))
+        self.front_label.setFont(QFont("Monaco", 40))
         self.front_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.back_label.setFont(QFont("Footlight MT Light", 40))
+        self.back_label.setFont(QFont("Monaco", 40))
         self.back_label.setAlignment(QtCore.Qt.AlignCenter)
 
         # label should remain size when hidden
@@ -72,7 +72,7 @@ class TestView(MyQDialog):
 
         # Flip button
         self.flipButton.setFont(button_font)
-        self.flipButton.setStyleSheet(BUTTON_STYLING)
+        self.flipButton.setStyleSheet(TEST_VIEW_BUTTONS)
         self.flipButton.setIcon(QIcon(self.icon_path + 'bulb.png'))
         self.flipButton.setIconSize(QtCore.QSize(50, 50))
 

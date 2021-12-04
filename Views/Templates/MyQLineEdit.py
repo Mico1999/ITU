@@ -6,7 +6,7 @@ class MyQLineEdit(QLineEdit):
     def __init__(self):
         super(MyQLineEdit, self).__init__()
         self.setStyleSheet(LINE_EDIT_STYLING)
-        self.setFont(QFont("Footlight MT Light", 40))
+        self.setFont(QFont("Monaco", 30))
         self.setMaxLength(30)
 
 LINE_EDIT_STYLING="""

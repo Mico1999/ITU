@@ -3,7 +3,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore, QtGui
 import sys
-from Views.Templates.ButtonStyling import ADD_BUTTON, WRONG_BUTTON, RIGHT_BUTTON, TOOL_STYLING, TEST_BUTTON
+from Views.Templates.ButtonStyling import ADD_BUTTON, WRONG_BUTTON, \
+    RIGHT_BUTTON, TOOL_STYLING, TEST_BUTTON, DELETE_BUTTON, SAVE_BUTTON
 from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
@@ -20,26 +21,22 @@ class CollectionDetailView(MyQDialog):
         self.setLayout(self.layout)
         self.form_layout = QHBoxLayout()
 
-        # self.formGroupBox = QGroupBox()
         self.collection_name_edit = MyQLineEdit()
         self.name_label = MyQLabel()
 
-        self.main_header = MyQLabel()
-
         self.navigation_layout = QHBoxLayout()
-        self.arrow_layout = QHBoxLayout()
         self.buttonLayout = QHBoxLayout()
 
         self.backArrow = QToolButton()
         self.homeButton = QToolButton()
-        self.saveButton = QPushButton("Save")
-        self.deleteButton = QPushButton("Delete collection")
-        self.testButton = QPushButton("Test")
+        self.saveButton = QPushButton(" Save")
+        self.deleteButton = QPushButton(" Delete collection")
+        self.testButton = QPushButton(" Test")
 
         self.scroll = QScrollArea()
         self.grid = QGridLayout()
         self.add_button_layout = QGridLayout()
-        self.addButton = QPushButton("Add card")
+        self.addButton = QPushButton(" Add card")
 
         self.setup_UI()
 
@@ -50,7 +47,7 @@ class CollectionDetailView(MyQDialog):
 
         # setting home and delete button
         button_font = QFont()
-        button_font.setFamily("UnShinmun")
+        button_font.setFamily("Monaco")
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
@@ -81,35 +78,17 @@ class CollectionDetailView(MyQDialog):
         self.form_layout.addWidget(self.name_label)
         self.form_layout.setSpacing(20)
         self.form_layout.addWidget(self.collection_name_edit)
-        self.form_layout.setContentsMargins(0,0,0,0)
-        self.form_layout.setAlignment(Qt.AlignBottom)
-        # self.form_layout.setSpacing(20)
-        # self.form_layout.setSpacing(20)
-        # self.form_layout.addWidget(self.saveButton)
-
-        # set style of formGroupBox
-        self.form_layout.setAlignment(Qt.AlignTop)
-        # self.formGroupBox.setLayout(self.form_layout)
-        # self.formGroupBox.setStyleSheet("QGroupBox::title { "
-        #                           "border: 0px ; "
-        #                           "border-radius: 0px; "
-        #                           "padding: 0px 0px 0px 0px;"
-        #                           " margin = 0px 0px 0px 0px } "
-        #                           "QGroupBox { "
-        #                           "border: 0px ; "
-        #                           "border-radius: 0px; "
-        #                           "padding: 0px 0px 0px 0px;} ")
-        # self.formGroupBox.setContentsMargins(0,0,0,0)
+        self.form_layout.setContentsMargins(20, 0, 20, 0)
 
         # Save collection buttton
         self.saveButton.setFont(button_font)
-        self.saveButton.setStyleSheet(RIGHT_BUTTON)
+        self.saveButton.setStyleSheet(SAVE_BUTTON)
         self.saveButton.setIcon(QIcon(self.icon_path + 'save.png'))
         self.saveButton.setIconSize(QtCore.QSize(50, 50))
 
         # Delete collection buttton
         self.deleteButton.setFont(button_font)
-        self.deleteButton.setStyleSheet(WRONG_BUTTON)
+        self.deleteButton.setStyleSheet(DELETE_BUTTON)
         self.deleteButton.setIcon(QIcon(self.icon_path + 'delete.png'))
         self.deleteButton.setIconSize(QtCore.QSize(50, 50))
 
@@ -124,8 +103,8 @@ class CollectionDetailView(MyQDialog):
         self.buttonLayout.addWidget(self.saveButton)
         self.buttonLayout.setSpacing(20)
         self.buttonLayout.addWidget(self.deleteButton)
+        self.buttonLayout.setContentsMargins(20, 0, 20, 0)
         self.buttonLayout.setAlignment(Qt.AlignRight)
-        self.buttonLayout.setContentsMargins(0,0,0,0)
 
         # Adding widgets to layout
         self.layout.addLayout(self.navigation_layout)
@@ -154,21 +133,24 @@ class CollectionDetailView(MyQDialog):
 
         self.add_button_layout.setContentsMargins(50, 0, 50, 0)
 
-        self.widget = QWidget()  # Widget that contains the collection of Grid
-        self.widget.setLayout(self.grid)
-        self.widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
+        widget = QWidget()  # Widget that contains the collection of Grid
+        widget.setLayout(self.grid)
+        widget.setStyleSheet("QWidget{background-color:  #FBF08A;}")
 
         # Scroll Area Properties
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.widget)
+        self.scroll.setWidget(widget)
         self.scroll.setStyleSheet(SCROLL_STYLING)
+        self.scroll.setMinimumHeight(330)
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         self.scroll.setSizePolicy(sizePolicy)
 
-        self.layout.addLayout(self.add_button_layout)
-        self.layout.addWidget(self.scroll)
+        button_widget = QWidget()
+        button_widget.setLayout(self.add_button_layout)
+        self.layout.addWidget(button_widget, alignment=Qt.AlignBottom)
+        self.layout.addWidget(self.scroll, alignment=Qt.AlignBottom)
