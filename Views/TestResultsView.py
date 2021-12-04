@@ -1,5 +1,9 @@
-from Views.Templates.ButtonStyling import BUTTON_STYLING, WRONG_BUTTON, RIGHT_BUTTON, TOOL_STYLING
-from Views.Templates.ProgressBarStyling import DEFAULT_STYLE
+#   Views/TestResultView.py module
+#   Implements static layout of view with results from the last test
+#   @Authors Peter Rúček (xrucek00), Marej Jurík (xjurik12)
+#   @date 2.12.2021
+
+from Views.Templates.ButtonStyling import BUTTON_STYLING, TOOL_STYLING, TEST_BUTTON
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -19,10 +23,8 @@ class TestResultsView(MyQDialog):
 
         # Navigation
         self.navigation_layout = QHBoxLayout()
-        self.arrow_layout = QHBoxLayout()
         self.buttonLayout = QHBoxLayout()
 
-        self.backArrow = QToolButton()
         self.homeButton = QToolButton()
 
         # Heading
@@ -37,6 +39,7 @@ class TestResultsView(MyQDialog):
 
         # Test result options
         self.retry_test_button = QPushButton("Retry test")
+        self.finish_test_button = QPushButton("Finish test")
 
         self.setup_UI()
 
@@ -53,17 +56,8 @@ class TestResultsView(MyQDialog):
         self.homeButton.setIconSize(QtCore.QSize(70, 70))
         self.homeButton.setToolTip('Home')
 
-        # Navigate back button
-        self.backArrow.setIcon(QIcon(self.icon_path + 'back-arrow.png'))
-        self.backArrow.setIconSize(QtCore.QSize(70, 70))
-        self.backArrow.setStyleSheet(TOOL_STYLING)
-        self.backArrow.setToolTip('Back')
-
-        self.navigation_layout.addWidget(self.backArrow)
         self.navigation_layout.addWidget(self.homeButton)
-        self.navigation_layout.addStretch(0)
-        self.navigation_layout.setContentsMargins(0, 0, 0, 0)
-        self.navigation_layout.setSpacing(25)
+        self.navigation_layout.setAlignment(Qt.AlignLeft)
 
         # Result heading text
         self.result_heading.setText("")
@@ -101,12 +95,22 @@ class TestResultsView(MyQDialog):
 
         # Retry test button
         self.retry_test_button.setFont(button_font)
-        self.retry_test_button.setStyleSheet(BUTTON_STYLING)
+        self.retry_test_button.setStyleSheet(TEST_BUTTON)
         self.retry_test_button.setIcon(QIcon(self.icon_path + 'test.png'))
         self.retry_test_button.setIconSize(QtCore.QSize(50, 50))
         self.retry_test_button.setMinimumHeight(125)
 
-        self.buttonLayout.addWidget(self.retry_test_button) # TODO RESIZE BUTON
+        # finish button
+        self.finish_test_button.setFont(button_font)
+        self.finish_test_button.setStyleSheet(TEST_BUTTON)
+        self.finish_test_button.setIcon(QIcon(self.icon_path + 'finish.png'))
+        self.finish_test_button.setIconSize(QtCore.QSize(50, 50))
+        self.finish_test_button.setMinimumHeight(125)
+
+        self.buttonLayout.addWidget(self.retry_test_button)
+        self.buttonLayout.setSpacing(25)
+        self.buttonLayout.addWidget(self.finish_test_button)
+        self.buttonLayout.setContentsMargins(150, 0, 150, 0)
 
         # Global layout setup
         self.layout.addLayout(self.navigation_layout)
