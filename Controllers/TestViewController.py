@@ -33,10 +33,12 @@ class TestViewController:
         self.test_results_controller = None
 
         self.testResults = {
-            "correct": 0,
-            "flipped": 0,
-            "incorrect": 0
+            "correct": [],
+            "flipped": [],
+            "incorrect": []
         }
+
+        self.current_testing_card = None
 
         self.setup_UI()
         self.connect()
@@ -52,15 +54,15 @@ class TestViewController:
 
         self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
         random.shuffle(self.cards)
-
         self.all_cards_count = len(self.cards)
 
         # Reset test results
-        self.testResults["correct"] = 0
-        self.testResults["flipped"] = 0
-        self.testResults["incorrect"] = 0
+        self.testResults["correct"] = []
+        self.testResults["flipped"] = []
+        self.testResults["incorrect"] = []
 
-        self.next_card()
+        self.current_testing_card = self.cards.pop() # should not fail
+        self.update_test_state()
 
     def connect(self):
         self._view.cancelButton.clicked.connect(self.redirect_back_action)
@@ -76,29 +78,44 @@ class TestViewController:
         self._moderator.switch_view_to_collection_detail_view()
 
     def correct_answer(self):
-        self.testResults["correct"] += 1
+        if self.current_testing_card:
+            self.testResults["correct"].append(self.current_testing_card)
+
         self.next_card()
 
     def wrong_answer(self):
-        self.testResults["incorrect"] += 1
+        if self.current_testing_card:
+            self.testResults["incorrect"].append(self.current_testing_card)
+
         self.next_card()
 
     def flipped_before_answer(self):
-        if self._view.back_label.isHidden():
-            self.testResults["flipped"] += 1
+        if self.current_testing_card and self._view.back_label.isHidden():
+            self.testResults["flipped"].append(self.current_testing_card)
+
         self.flip_card()
 
+    def update_test_state(self):
+        # Update UI
+        self._view.front_label.setText(self.current_testing_card.front_text)
+        self._view.back_label.setText(self.current_testing_card.back_text)
+        self._view.back_label.setHidden(True)
+        fraction = (len(self.cards) + 1) / self.all_cards_count
+        self._view.progress.setValue(100 - fraction * 100)
+        self._view.progress.setFormat(
+            str(self.all_cards_count - 1 - len(self.cards)) + "/" + str(self.all_cards_count)
+        )
+
     def next_card(self):
-        if self.cards:
-            card = self.cards.pop()
-            self._view.front_label.setText(card.front_text)
-            self._view.back_label.setText(card.back_text)
-            self._view.back_label.setHidden(True)
-            fraction = (len(self.cards) + 1) / self.all_cards_count
-            self._view.progress.setValue(100 - fraction*100)
-            self._view.progress.setFormat(
-                str(self.all_cards_count -1 - len(self.cards)) + "/" + str(self.all_cards_count)
-            )
+        """
+        Update test state if not out of cards, else conclude test
+        """
+
+        # Select next testing card
+        self.current_testing_card = self.cards.pop() if self.cards else None
+
+        if self.current_testing_card:
+            self.update_test_state()
         else:
             self.conclude_test()
 
@@ -109,10 +126,19 @@ class TestViewController:
         # Save test results
         test_results_data = CollectionTestResult(
             cards=self.all_cards_count,
-            correct_answers=self.testResults["correct"],
-            times_flipped=self.testResults["flipped"],
+            correct_answers=len(self.testResults["correct"]),
+            times_flipped=len(self.testResults["flipped"]),
             collection_id=self.collection.id)
         self._collection_test_result_repository.insert(test_results_data)
+
+        # Update card remembered state
+        for unknown_card in self.testResults["incorrect"]:
+            unknown_card.remembered = False
+            self._card_repository.update_card(unknown_card)
+
+        for remembered_card in self.testResults["correct"]:
+            remembered_card.remembered = True
+            self._card_repository.update_card(remembered_card)
 
         # Render test results view
         self.test_results_controller = TestResultsViewController(

@@ -39,9 +39,9 @@ class TestResultsViewController:
         self._view.result_heading.setText(f"{self.collection_name}: Test Results")
 
         # Current test results result-data mapping
-        self._view.test_result_correct.setText(f"Correct: {self._results.get('correct')}")
-        self._view.test_result_flipped.setText(f"Times flipped: {self._results.get('flipped')}")
-        self._view.test_result_incorrect.setText(f"Incorrect: {self._results.get('incorrect')}")
+        self._view.test_result_correct.setText(f"Correct: {len(self._results.get('correct'))}")
+        self._view.test_result_flipped.setText(f"Times flipped: {len(self._results.get('flipped'))}")
+        self._view.test_result_incorrect.setText(f"Incorrect: {len(self._results.get('incorrect'))}")
 
     def connect(self):
         self._view.homeButton.clicked.connect(self.redirect_home_action)

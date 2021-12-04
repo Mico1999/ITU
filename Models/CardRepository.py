@@ -16,6 +16,10 @@ class CardRepository:
 
         self.session.commit()
 
+    def update_card(self, card):
+        self.session.add(card)
+        self.session.commit()
+
     def delete_card(self, card):
         try:
             self.get_card_by_id(card.id)
