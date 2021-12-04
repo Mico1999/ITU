@@ -26,13 +26,14 @@ class TestResultsView(MyQDialog):
         self.homeButton = QToolButton()
 
         # Heading
+        self.result_heading_layout = QVBoxLayout()
         self.result_heading = MyQLabel()
 
         # Test results
         self.test_result_layout = QVBoxLayout()
-        self.test_result_correct = QLabel()
-        self.test_result_flipped = QLabel()
-        self.test_result_incorrect = QLabel()
+        self.test_result_correct = MyQLabel()
+        self.test_result_flipped = MyQLabel()
+        self.test_result_incorrect = MyQLabel()
 
         # Test result options
         self.retry_test_button = QPushButton("Retry test")
@@ -66,7 +67,31 @@ class TestResultsView(MyQDialog):
 
         # Result heading text
         self.result_heading.setText("")
+
+        result_heading_font = QFont()
+        result_heading_font.setFamily("UnShinmun")
+        result_heading_font.setBold(True)
+        result_heading_font.setPointSize(36)
+
+        self.result_heading.setFont(result_heading_font)
+        self.result_heading.setStyleSheet(
+            """
+            QLabel {
+                padding: 10px 20px;
+                border: 2px solid black;
+                border-radius: 5px;
+            }
+            """)
+
+        result_heading_size_policy = QSizePolicy()
+        result_heading_size_policy.setHorizontalPolicy(QSizePolicy.Maximum)
+        result_heading_size_policy.setVerticalPolicy(QSizePolicy.Maximum)
+
+        self.result_heading.setSizePolicy(result_heading_size_policy)
         self.result_heading.setAlignment(Qt.AlignCenter)
+
+        self.result_heading_layout.addWidget(self.result_heading)
+        self.result_heading_layout.setAlignment(Qt.AlignCenter)
 
         # Specific results' labels
         self.test_result_layout.addWidget(self.test_result_correct)
@@ -79,11 +104,12 @@ class TestResultsView(MyQDialog):
         self.retry_test_button.setStyleSheet(BUTTON_STYLING)
         self.retry_test_button.setIcon(QIcon(self.icon_path + 'test.png'))
         self.retry_test_button.setIconSize(QtCore.QSize(50, 50))
+        self.retry_test_button.setMinimumHeight(125)
 
         self.buttonLayout.addWidget(self.retry_test_button) # TODO RESIZE BUTON
 
         # Global layout setup
         self.layout.addLayout(self.navigation_layout)
-        self.layout.addWidget(self.result_heading)
+        self.layout.addLayout(self.result_heading_layout)
         self.layout.addLayout(self.test_result_layout)
         self.layout.addLayout(self.buttonLayout)
