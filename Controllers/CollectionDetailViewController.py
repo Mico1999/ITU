@@ -1,3 +1,5 @@
+from PyQt5 import QtGui
+
 from Models.LessonRepository import LessonRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
@@ -101,13 +103,21 @@ class CollectionDetailViewController:
             self.card_buttons[index].setStyleSheet(BUTTON_STYLING)
             self.card_buttons[index].setMinimumSize(QSize(200, 100))
             self.card_buttons[index].setMaximumSize(QSize(600, 100))
+
+            if not self.cards[index].remembered:
+                shadow_effect = QGraphicsDropShadowEffect()
+                shadow_effect.setColor(QtGui.QColor(255, 0, 0))
+                shadow_effect.setOffset(2)
+                shadow_effect.setBlurRadius(25)
+                self.card_buttons[index].setGraphicsEffect(shadow_effect)
+
             self._view.grid.addWidget(self.card_buttons[index], row, (i % COLUMNS))
 
             self.card_buttons[index].clicked.connect(
                 partial(self.add_card_view, self.collection.id, self.cards[index].id))
             index = index + 1
 
-        # Adding invisible buttons, so the has always COLUMNS columns
+        # Adding invisible buttons, so the grid has always COLUMNS columns
         empty_buttons = []
         index = 0
         for i in range(COLUMNS - 1, (column_finished % COLUMNS), -1):
