@@ -139,6 +139,11 @@ class CollectionDetailViewController:
         # Lesson data from input
         collection_name_string = self._view.collection_name_edit.text()
 
+        if self.collection:
+            if collection_name_string == self.collection.collection_name:
+                self.redirect_back_action()
+                return
+
         if not collection_name_string:
             QMessageBox.critical(None, "Error!", "Collection name must be filled !")
             return

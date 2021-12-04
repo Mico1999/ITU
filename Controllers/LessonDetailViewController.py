@@ -12,6 +12,7 @@ from Views.LessonDetailView import LessonDetailView
 from Controllers.CollectionDetailViewController import CollectionDetailViewController
 from sqlalchemy.exc import NoResultFound
 
+
 class LessonDetailViewController:
 
     def __init__(self, moderator, stacked_widget, lesson_name):
@@ -27,9 +28,9 @@ class LessonDetailViewController:
         self._moderator = moderator
         self._moderator.add_lesson_detail_controller(self)
 
-        self.collections = [] # All collection in current lesson
+        self.collections = []  # All collection in current lesson
         self.collection_buttons = []
-        self.lesson = None # Current lesson
+        self.lesson = None  # Current lesson
         if lesson_name:
             self.lesson = self._lesson_repository.get_lesson_by_name(lesson_name)
             self.collections = self.collection_repository.get_all_lesson_collections(self.lesson)
@@ -54,6 +55,12 @@ class LessonDetailViewController:
         lesson_name_string = self._view.lesson_name_edit.text()
         lesson_field_string = self._view.lesson_field_edit.text()
 
+        if self.lesson:
+            if lesson_name_string == self.lesson.name and \
+                    lesson_field_string == self.lesson.study_field:
+                self.redirect_home_action()
+                return
+
         if not lesson_name_string or not lesson_field_string:
             QMessageBox.critical(None, "Error!", "Both fields with lesson name and field must be filled !")
             return
@@ -69,7 +76,7 @@ class LessonDetailViewController:
                 self._lesson_repository.insert_lesson(self.lesson)
             else:  # insert
                 new_lesson = Lesson(name=lesson_name_string, study_field=lesson_field_string)
-                self._lesson_repository.insert_lesson(new_lesson)    # save new lesson to DB
+                self._lesson_repository.insert_lesson(new_lesson)  # save new lesson to DB
 
                 # enable adding new collection by clicking on add button without need to render this view once again
                 self._view.addButton.show()
@@ -148,7 +155,7 @@ class LessonDetailViewController:
             self.collection_buttons[index].setStyleSheet(BUTTON_STYLING)
             self.collection_buttons[index].setMinimumSize(QSize(200, 100))
             self.collection_buttons[index].setMaximumSize(QSize(600, 100))
-            self._view.grid.addWidget(self.collection_buttons[index], row,  (i % COLUMNS))
+            self._view.grid.addWidget(self.collection_buttons[index], row, (i % COLUMNS))
 
             self.collection_buttons[index].clicked.connect(
                 partial(self.add_collection_view, self.collections[index].id))

@@ -58,6 +58,12 @@ class CardDetailViewController:
         card_front_string = self._view.card_front_edit.text()
         card_back_string = self._view.card_back_edit.text()
 
+        if self.card:
+            if card_front_string == self.card.front_text and \
+                    card_back_string == self.card.back_text:
+                self.redirect_back_action()
+                return
+
         if not card_front_string or not card_back_string:
             QMessageBox.critical(None, "Error!", "Both card front and back page must be filled !")
             return
