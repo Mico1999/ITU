@@ -1,7 +1,13 @@
+#   Models/CardRepository.py module
+#   Implements basic functions to work with the Card table
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from Database.ConnectDB import DbConnection
 from Models.DbEntities import Lesson, Card, Collection
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy import and_
+
 
 class CardRepository:
     def __init__(self):

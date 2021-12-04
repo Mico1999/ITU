@@ -1,3 +1,9 @@
+
+#   Models/DbEntities.py module
+#   Declaration of DB Tables/ Entities
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 import datetime
 from sqlalchemy.orm import declarative_base

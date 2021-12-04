@@ -1,3 +1,8 @@
+#   Controllers/CardDetailViewController.py module
+#   Implements the controller for the card detail view
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from PyQt5.QtWidgets import *
 from Models.DbEntities import Card, Collection
 from Models.CardRepository import CardRepository
@@ -30,7 +35,7 @@ class CardDetailViewController:
     def setup_UI(self):
         self._view = CardDetailView()
 
-        # add lesson detail view on stack
+        # add card detail view on stack
         self._stacked_widget.addWidget(self._view)
 
         # increase index of stack to see detail view
@@ -46,7 +51,7 @@ class CardDetailViewController:
             self._view.deleteButton.hide()
 
     def connect(self):
-        # connect buttons from lesson detail views to slots
+        # connect buttons from card detail views to slots
         self._view.saveButton.clicked.connect(self.save_card)
         self._view.deleteButton.clicked.connect(self.delete_card)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
@@ -112,16 +117,16 @@ class CardDetailViewController:
     def redirect_home_action(self):
         """ redirect to home view when user clicked home button """
 
-        # delete three views from stack, cause home view will be rendered again
+        # delete four views from stack, cause home view will be rendered again
         self._moderator.reduce_widget_stack(self._stacked_widget, 4)
 
         # moderator will call main window controller to render home view once again
         self._moderator.switch_view_to_main_window()
 
     def redirect_back_action(self):
-        """ redirect to lesson detail view when user clicked delete button """
+        """ redirect to collection detail view when user clicked delete/back button """
 
         self._moderator.reduce_widget_stack(self._stacked_widget, 2)
 
-        # moderator will call lesson detail controller to render view
+        # moderator will call collection detail controller to render view
         self._moderator.switch_view_to_collection_detail_view()

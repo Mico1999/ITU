@@ -1,4 +1,8 @@
-from PyQt5.QtCore import QEventLoop
+#   Controllers/TestViewController.py module
+#   Implements the controller for test view
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from Models.CollectionRepository import CollectionRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionTestResultRepository import CollectionTestResultRepository
@@ -46,10 +50,9 @@ class TestViewController:
     def setup_UI(self):
         self._view = TestView()
 
-
-        # add lesson detail view on stack
+        # add test view on stack
         self._stacked_widget.addWidget(self._view)
-        # increase index of stack to see detail view
+        # increase index of stack to see test view
         self._stacked_widget.setCurrentIndex(self._stacked_widget.currentIndex() + 1)
 
         self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
@@ -71,10 +74,10 @@ class TestViewController:
         self._view.flipButton.clicked.connect(self.flipped_before_answer)
 
     def redirect_back_action(self):
-        """ redirect to lesson detail view when user clicked delete button """
+        """ redirect to collection detail view when user clicked delete button """
 
         self._moderator.reduce_widget_stack(self._stacked_widget, 2)
-        # moderator will call lesson detail controller to render view
+        # moderator will call collection detail controller to render view
         self._moderator.switch_view_to_collection_detail_view()
 
     def correct_answer(self):

@@ -1,4 +1,7 @@
-from PyQt5.QtWidgets import *
+#   Controllers/ModeratorController.py module
+#   Implements the controller moderator
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
 
 class ModeratorController:
     """ Calls functions of view controllers to dynamically change views on the basis of triggered actions"""
@@ -32,8 +35,6 @@ class ModeratorController:
 
     # to switch view just call this functions
     def switch_view_to_main_window(self):
-        """ New rendering of main home view, cause need to dynamically override"""
-
         # setup home view once again to see changes
         self.main_window_controller.setup_UI()
 

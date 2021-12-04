@@ -1,7 +1,7 @@
-##  main.py file
-#   Enter point of the app
-#   @Authors Marek Miček (xmicek08), ....
-#   @date 5.11.2021
+#   main.py module
+#   Starting point of the program
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
 
 import sys
 from PyQt5.QtWidgets import QApplication
@@ -13,8 +13,8 @@ def main():
 
     app = QApplication(sys.argv)
 
-    # Seed initial data, if called once, should be commented, bcs throws exception
-    # seed()
+    # Seed initial data, if called once, should be commented, because throws exception
+    seed()
 
     # create controller for main view, view is rendered in controller
     MainWindowController()

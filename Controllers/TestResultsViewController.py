@@ -1,4 +1,8 @@
-from PyQt5.QtCore import QEventLoop
+#   Controllers/TestResultsViewController.py module
+#   Implements the controller for test results
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from Models.CollectionRepository import CollectionRepository
 from Models.CardRepository import CardRepository
 from Views.TestResultsView import TestResultsView
@@ -49,10 +53,10 @@ class TestResultsViewController:
         self._view.retry_test_button.clicked.connect(self.retry_test_action)
 
     def redirect_back_action(self):
-        """ redirect to lesson detail view when user clicked delete button """
+        """ redirect to collection detail view when user clicked back button """
 
         self._moderator.reduce_widget_stack(self._stacked_widget, 3)
-        # moderator will call lesson detail controller to render view
+        # moderator will call collection detail controller to render view
         self._moderator.switch_view_to_collection_detail_view()
 
     def redirect_home_action(self):

@@ -1,5 +1,9 @@
-from PyQt5 import QtGui
+#   Controllers/CollectionDetailViewController.py module
+#   Implements the controller for the collection detail view
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
 
+from PyQt5 import QtGui
 from Models.LessonRepository import LessonRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
@@ -41,7 +45,7 @@ class CollectionDetailViewController:
         if id_of_collection:
             self.collection = self._collection_repository.get_collection_by_id(id_of_collection)
             self.cards = self._card_repository.get_all_collection_cards(self.collection.id)
-        if lesson_id: # self.lesson cannot stay None
+        if lesson_id:
             self.lesson = self._lesson_repository.get_lesson_by_id(lesson_id)
 
         self.test_controller = None
@@ -54,7 +58,7 @@ class CollectionDetailViewController:
 
         self._view = CollectionDetailView()
 
-        # add lesson detail view on stack
+        # add collection detail view on stack
         self._stacked_widget.addWidget(self._view)
 
         # increase index of stack to see detail view
@@ -71,9 +75,13 @@ class CollectionDetailViewController:
             self.latest_test_results = \
                 self._collection_test_result_repository.get_latest_by_collection(self.collection) or None
             if self.latest_test_results:
+                self._view.bar.setRange(0, self.latest_test_results.cards)
+                self._view.bar.setValue(self.latest_test_results.correct_answers)
+                self._view.bar.setHidden(False)
+                self._view.result_label.setText("Last test result:")
+                self._view.result_label.setHidden(False)
                 self._view.last_results_label.setText(
-                    f"Latest test result: {self.latest_test_results.correct_answers}/{self.latest_test_results.cards} "
-                    f"correct answers, cards flipped {self.latest_test_results.times_flipped} times"
+                    f" Cards flipped {self.latest_test_results.times_flipped} times"
                 )
                 self._view.last_results_label.setHidden(False)
 
@@ -82,7 +90,6 @@ class CollectionDetailViewController:
             self._view.deleteButton.hide()
             self._view.addButton.hide()
 
-        # self._view.addButton.clicked.connect(partial(self.add_card_view, self.collection.id, None))
         # hide test button if there is no collection nor cards in detail view yet
         if not self.collection or not self.cards:
             self._view.testButton.hide()
@@ -137,7 +144,7 @@ class CollectionDetailViewController:
     def connect(self):
         """ Connect view with click in separate function"""
 
-        # connect buttons from lesson detail views to slots
+        # connect buttons from collection detail views to slots
         self._view.saveButton.clicked.connect(self.save_collection)
         self._view.deleteButton.clicked.connect(self.delete_collection)
         self._view.homeButton.clicked.connect(self.redirect_home_action)
@@ -154,7 +161,7 @@ class CollectionDetailViewController:
         self._moderator.switch_view_to_main_window()
 
     def redirect_back_action(self):
-        """ redirect to lesson detail view when user clicked delete button """
+        """ redirect to lesson detail view when user clicked delete/back button """
 
         self._moderator.reduce_widget_stack(self._stacked_widget, 2)
 

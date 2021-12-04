@@ -1,7 +1,7 @@
-#  Controllers/MainWindowController.py module
+#   Controllers/MainWindowController.py module
 #   Implements the controller for the main view of app
-#   @Authors Marek Miček (xmicek08), ....
-#   @date 5.11.2021
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
 
 from Views.MainWindow import *
 from Models.LessonRepository import LessonRepository

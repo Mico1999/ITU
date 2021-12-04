@@ -14,6 +14,7 @@ from Views.Templates.MyQDialog import MyQDialog
 from Views.Templates.MyQLineEdit import MyQLineEdit
 from Views.Templates.MyQLabel import MyQLabel
 from Views.Templates.ScrollStyling import SCROLL_STYLING
+from Views.Templates.CircularProgressBar import QRoundProgressBar
 
 
 class CollectionDetailView(MyQDialog):
@@ -43,7 +44,10 @@ class CollectionDetailView(MyQDialog):
         self.add_button_layout = QGridLayout()
         self.addButton = QPushButton(" Add card")
 
+        self.result_layout = QHBoxLayout()
+        self.bar = QRoundProgressBar()
         self.last_results_label = MyQLabel()
+        self.result_label = MyQLabel()
 
         self.setup_UI()
 
@@ -126,10 +130,31 @@ class CollectionDetailView(MyQDialog):
 
         # Last results label
         self.last_results_label.setHidden(True)
+        self.result_label.setHidden(True)
+
+        # circular progress bar
+        self.bar.setFixedSize(150, 150)
+        self.bar.setDataPenWidth(3)
+        self.bar.setOutlinePenWidth(3)
+        self.bar.setDonutThicknessRatio(0.85)
+        self.bar.setDecimals(0)
+        self.bar.setFormat('%v / %m')
+        self.bar.setNullPosition(90)
+        self.bar.setBarStyle(QRoundProgressBar.StyleDonut)
+        self.bar.setStyleSheet("QWidget{background-color: #FBF08A;"
+                               "    color: orange;}")
+        self.bar.setDataColors([(0., QtGui.QColor.fromRgb(255, 165, 0))])
+        self.bar.setHidden(True)
+
+        self.result_layout.setAlignment(Qt.AlignCenter)
+        self.result_layout.setContentsMargins(20, 20, 0, 20)
+        self.result_layout.addWidget(self.result_label, alignment=Qt.AlignRight)
+        self.result_layout.addWidget(self.bar)
+        self.result_layout.addWidget(self.last_results_label)
+        self.layout.addLayout(self.result_layout)
 
         self.add_button_layout.setSpacing(20)
         self.add_button_layout.addWidget(self.addButton, 0, 0)
-        self.add_button_layout.addWidget(self.last_results_label, 0, 1)
 
         empty_buttons = []
         index = 0

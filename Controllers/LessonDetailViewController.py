@@ -1,7 +1,10 @@
+#   Controllers/LessonDetailViewController.py module
+#   Implements the controller for the lesson detail view
+#   @Authors Marek Miček (xmicek08), Matej Jurík (xjurik12), Peter Rúček (xrucek00)
+#   @date 4.12.2021
+
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5 import QtCore
 from Models.LessonRepository import LessonRepository
 from Models.CardRepository import CardRepository
 from Models.CollectionRepository import CollectionRepository
