@@ -1,3 +1,8 @@
+#   Views/CardDetailView.py module
+#   Implements static layout of card detail
+#   @Authors Marek Miček (xmicek08), Peter Rúček (xrucek00), Marej Jurík (xjurik12)
+#   @date 1.12.2021
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -85,13 +90,13 @@ class CardDetailView(MyQDialog):
         button_font.setBold(False)
         button_font.setWeight(50)
 
-        # Save collection buttton
+        # Save collection button
         self.saveButton.setFont(button_font)
         self.saveButton.setStyleSheet(RIGHT_BUTTON)
         self.saveButton.setIcon(QIcon(self.icon_path + 'save.png'))
         self.saveButton.setIconSize(QtCore.QSize(50, 50))
 
-        # Delete collection buttton
+        # Delete collection button
         self.deleteButton.setFont(button_font)
         self.deleteButton.setStyleSheet(WRONG_BUTTON)
         self.deleteButton.setIcon(QIcon(self.icon_path + 'delete.png'))
@@ -102,7 +107,7 @@ class CardDetailView(MyQDialog):
         self.buttonLayout.addWidget(self.deleteButton)
         self.buttonLayout.setAlignment(Qt.AlignCenter)
 
-        # Adding widgets to layout
+        # Adding widgets to global layout
         self.layout.addLayout(self.navigation_layout)
         self.layout.addWidget(self.formGroupBox)
         self.layout.addLayout(self.buttonLayout)

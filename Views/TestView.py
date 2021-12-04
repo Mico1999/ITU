@@ -1,3 +1,8 @@
+#   Views/TestView.py module
+#   Implements static layout of test view
+#   @Authors Peter Rúček (xrucek00), Marej Jurík (xjurik12)
+#   @date 2.12.2021
+
 from Views.Templates.ButtonStyling import TEST_VIEW_BUTTONS, WRONG_BUTTON, RIGHT_BUTTON
 from Views.Templates.ProgressBarStyling import DEFAULT_STYLE
 import sys
@@ -55,7 +60,7 @@ class TestView(MyQDialog):
         self.back_label.setAlignment(QtCore.Qt.AlignCenter)
 
         # label should remain size when hidden
-        policy =  self.back_label.sizePolicy()
+        policy = self.back_label.sizePolicy()
         policy.setRetainSizeWhenHidden(True)
         self.back_label.setSizePolicy(policy)
     
@@ -94,7 +99,7 @@ class TestView(MyQDialog):
         self.buttonLayoutBottom.addWidget(self.rightButton)
         self.buttonLayoutBottom.setAlignment(Qt.AlignVCenter)
 
-        # Adding widgets to layout
+        # Adding widgets to global layout
         self.layout.addLayout(self.buttonLayoutTop)
         self.layout.addLayout(self.label_layout)
         self.layout.addLayout(self.buttonLayoutBottom)

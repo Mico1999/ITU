@@ -1,4 +1,4 @@
-##  Controllers/MainWindowController.py module
+#  Controllers/MainWindowController.py module
 #   Implements the controller for the main view of app
 #   @Authors Marek Miček (xmicek08), ....
 #   @date 5.11.2021

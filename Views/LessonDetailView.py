@@ -1,3 +1,8 @@
+#   Views/LessonDetailView.py module
+#   Implements static layout of lesson detail
+#   @Authors Marek Miček (xmicek08), Peter Rúček (xrucek00)
+#   @date 5.11.2021
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -99,7 +104,7 @@ class LessonDetailView(MyQDialog):
         self.buttonLayout.setContentsMargins(20, 0, 20, 0)
         self.buttonLayout.setAlignment(Qt.AlignRight)
 
-        # Adding widgets to layout
+        # Adding widgets to global layout
         self.layout.addLayout(self.navigation_layout)
         self.layout.addLayout(self.form_layout)
         self.layout.addLayout(self.buttonLayout)

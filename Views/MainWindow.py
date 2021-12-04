@@ -1,3 +1,8 @@
+#   Views/MainWindow.py module
+#   Implements static layout of app's home/main window
+#   @Authors Marek Miček (xmicek08), Peter Rúček (xrucek00)
+#   @date 5.11.2021
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -25,6 +30,7 @@ class MainWindow(QMainWindow):
         self.addButton = QPushButton(" Add lesson")
         self.title_label = QLabel()
         self.setStyleSheet("QMainWindow{background-color:  #FBF08A;}")
+        self.button_style_sheet = BUTTON_STYLING
 
         self.setup_UI()
 
@@ -40,7 +46,6 @@ class MainWindow(QMainWindow):
         button_font.setPointSize(15)
         button_font.setBold(False)
         button_font.setWeight(50)
-        self.button_style_sheet = BUTTON_STYLING
 
         # Create buttons
         self.addButton.setFont(button_font)
