@@ -12,7 +12,6 @@ from Views.MainWindow import MainWindow
 from functools import partial
 from Controllers.ModeratorController import ModeratorController
 
-from Models.DbEntities import Lesson, Card, Collection
 
 class MainWindowController:
 
@@ -24,6 +23,8 @@ class MainWindowController:
 
         self.stacked_widget = QStackedWidget()
         self.stacked_widget.setWindowTitle("StudyDex")
+        self.icon_path = 'Views/Assets/' if sys.platform.startswith('linux') else 'Views\\Assets\\'
+        self.stacked_widget.setWindowIcon(QIcon(self.icon_path + 'hat.png'))
         self.stacked_widget.resize(1300, 600)
 
         # Register moderator
