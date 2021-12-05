@@ -7,7 +7,7 @@
 
 ### Inštalácia
 * Python3
-* Knižnice popísané v [requirements.txt](./requirements.txt)
+* Knižnice popísané v [requirements.txt](./requirements.txt) : pip install -r requirements.txt
 
 ### Spustenie
 **python main.py**
